@@ -1,5 +1,5 @@
-import ExamplePage from './ExamplePage';
+import Home from './Home';
 
 export {
-	ExamplePage,
+	Home,
 };

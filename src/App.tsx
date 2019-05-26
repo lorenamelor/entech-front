@@ -6,14 +6,14 @@ import theme from './utils/theme';
 
 // Pages
 
-import { ExamplePage } from './pages';
+import { Home } from './pages';
 
 class App extends React.Component {
   public render() {
     return (
       <ThemeProvider theme={theme}>
         <div className="App">
-          <Route exact path='/' component={ExamplePage} />
+          <Route exact path='/' component={Home} />
         </div>
       </ThemeProvider>
     );

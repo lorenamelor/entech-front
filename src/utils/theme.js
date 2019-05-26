@@ -1,5 +1,5 @@
 const colors = {
-  primary: '#21BA95',
+  primary: '#5dc5d2',
   red: '#FF4E3D',
   white: '#FFFFFF',
   gray10: '#F7F7F7',
@@ -14,4 +14,4 @@ const colors = {
   transparent: '#FFFFFF00',
 };
 
-export default colors;
+export default { colors : { ...colors }};
