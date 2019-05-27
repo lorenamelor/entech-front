@@ -7,7 +7,7 @@ Front em reactjs e typeScript
 Você vai precisar de [Node.js](http://nodejs.org/).
 
 ```sh
-git clone git@github.com:lorenamelor/entech.git
+git clone git@github.com:lorenamelor/entech-front.git
 npm i
 npm start
 ```
