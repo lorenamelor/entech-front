@@ -6,6 +6,7 @@ Front em reactjs e typeScript
 
 Você vai precisar de [Node.js](http://nodejs.org/).
 
+Após configurar o back-end disponível em: [entech-backend](https://github.com/LucasASantos/DTI.EnTech), basta seguir os passos abaixo: 
 ```sh
 git clone git@github.com:lorenamelor/entech-front.git
 npm i
