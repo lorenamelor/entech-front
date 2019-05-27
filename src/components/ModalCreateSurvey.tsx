@@ -1,15 +1,22 @@
 import * as React from 'react';
-import styled from 'styled-components';
+import { Dispatch } from 'redux';
 import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
-import { Modal, TextField, Button } from '@material-ui/core';
-import { Text } from '../components';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import styled from 'styled-components';
 
+import { Modal, TextField, Button } from '@material-ui/core';
+// import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { Text } from '../components';
+
+import { iSurvey } from '../utils/interfaces';
+import { surveyCreate, surveyEdit, selectSurvey, surveyRequestById } from '../store/survey';
+import { connect } from 'react-redux';
+import { IRootState } from '../store';
 
 interface IProps {
   open: boolean;
   handleClose: () => void;
+  surveyId?: string;
 }
 
 const validationForm = Yup.object().shape({
@@ -20,7 +27,7 @@ const validationForm = Yup.object().shape({
   address: Yup.string().required("Campo obrigatório"),
   city: Yup.string().required("Campo obrigatório"),
   state: Yup.string().required("Campo obrigatório"),
-  photoUrl: Yup.string(),
+  photoURL: Yup.string(),
 });
 
 const initialValues = {
@@ -33,184 +40,242 @@ const initialValues = {
   address: '',
   city: '',
   state: '',
-  photoUrl: '',
+  photoURL: '',
 }
 
-function ModalCreateSurvey({ open, handleClose }: IProps) {
-  return (
-    <div>
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={open}
-        onClose={handleClose}
-      >
-        <Body>
-          <Text size={22}>Cadastrar Enquete</Text>
+class ModalCreateSurvey extends React.PureComponent<IProps & IMapDispatchToProps & IMapStateToProps> {
+  
+  public componentDidMount(){
+    const { surveyId } = this.props;
 
-          <Formik
-            initialValues={initialValues}
-            enableReinitialize
-            validationSchema={validationForm}
-            onSubmit={values => { console.log('values', values) }}
-          >
-            {({ errors, touched, values: { title, surveyEndDate, numberWinners, date, startTime, endTime, address, city, state, photoUrl },
-              handleChange, setFieldTouched }) => {
+    if(surveyId){
+      this.props.surveyRequestById(surveyId);
+    }
+  }
 
-              const change = (nameInput: any, e: any) => {
-                e.persist();
-                handleChange(e);
-                setFieldTouched(nameInput, true, false);
-              };
-              
-              console.log('values', title, surveyEndDate, numberWinners, date, startTime, endTime, address, city, state, photoUrl )
-              return (
-                <Form>
-                  <Input
-                    label="Titulo"
-                    name='title'
-                    value={title}
-                    helperText={touched.title ? errors.title : ""}
-                    error={touched.title && Boolean(errors.title)}
-                    onChange={change.bind(null, "title")}
-                    width="99%"
-                  />
+  public render() {
+    const { open, handleClose, survey, surveyId } = this.props;
+    return (
+      <div>
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={open}
+          onClose={handleClose}
+        >
+          <Body>
+            <Text size={22}>Cadastrar Enquete</Text>
 
-                  <Input
-                    label="Encerramento"
-                    type="date"
-                    name="surveyEndDate"
-                    value={surveyEndDate}
-                    helperText={touched.surveyEndDate ? errors.surveyEndDate : ""}
-                    error={touched.surveyEndDate && Boolean(errors.surveyEndDate)}
-                    onChange={change.bind(null, "surveyEndDate")}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    width="42%"
-                  />
+            <Formik
+              initialValues={surveyId && survey._id === surveyId ? survey : initialValues}
+              enableReinitialize
+              validationSchema={validationForm}
+              onSubmit={values => {
+                values.startTime = `${values.date}T${values.startTime}:00`
+                values.endTime = `${values.date}T${values.endTime}:00`
 
-                  <Input
-                    label="N° vencedores"
-                    name="numberWinners"
-                    type="number"
-                    value={numberWinners}
-                    helperText={touched.numberWinners ? errors.numberWinners : ""}
-                    error={touched.numberWinners && Boolean(errors.numberWinners)}
-                    onChange={change.bind(null, "numberWinners")}
-                    width="30%"
-                  />
+                const payload = {
+                  ...values,
+                  userId: "5ce030c9d323f326247f3122"
+                }
 
-                  <input
-                    accept="image/*"
-                    id="button-file"
-                    multiple
-                    type="file"
-                    style={{ display: 'none' }}
-                    name="photoUrl"
-                    value={photoUrl}
-                    onChange={change.bind(null, "photoUrl")}
-                  />
-                  <label htmlFor="button-file">
-                    <BtnUpload variant="contained" component="span">
-                      <CloudUploadIcon style={{ marginRight: 3 }} />
-                      Foto
+                surveyId 
+                ? this.props.surveyEdit(payload, surveyId)
+                : this.props.surveyCreate(payload);
+                handleClose();
+              }}
+            >
+              {({ errors, touched, values: {
+                title,
+                surveyEndDate,
+                numberWinners,
+                date,
+                startTime,
+                endTime,
+                address,
+                city,
+                state,
+                photoURL },
+                handleChange, setFieldTouched }) => {
+
+                const change = (nameInput: any, e: any) => {
+                  e.persist();
+                  handleChange(e);
+                  setFieldTouched(nameInput, true, false);
+                };
+
+                return (
+                  <Form>
+                    <Input
+                      label="Titulo"
+                      name='title'
+                      value={title}
+                      helperText={touched.title ? errors.title : ""}
+                      error={touched.title && Boolean(errors.title)}
+                      onChange={change.bind(null, "title")}
+                      width="99%"
+                    />
+
+                    <Input
+                      label="Encerramento"
+                      type="date"
+                      name="surveyEndDate"
+                      value={surveyEndDate}
+                      helperText={touched.surveyEndDate ? errors.surveyEndDate : ""}
+                      error={touched.surveyEndDate && Boolean(errors.surveyEndDate)}
+                      onChange={change.bind(null, "surveyEndDate")}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      width="42%"
+                    />
+
+                    <Input
+                      label="N° vencedores"
+                      name="numberWinners"
+                      type="number"
+                      value={numberWinners}
+                      helperText={touched.numberWinners ? errors.numberWinners : ""}
+                      error={touched.numberWinners && Boolean(errors.numberWinners)}
+                      onChange={change.bind(null, "numberWinners")}
+                      width="30%"
+                    />
+
+                    {/* <input
+                      accept="image/*"
+                      id="button-file"
+                      multiple
+                      type="file"
+                      style={{ display: 'none' }}
+                      name="photoURL"
+                      value={photoURL}
+                      onChange={change.bind(null, "photoURL")}
+                    />
+                    <label htmlFor="button-file">
+                      <BtnUpload variant="contained" component="span">
+                        <CloudUploadIcon style={{ marginRight: 3 }} />
+                        Foto
                     </BtnUpload>
-                  </label>
+                    </label> */}
 
-                  <Input
-                    label="Data"
-                    type="date"
-                    name="date"
-                    value={date}
-                    helperText={touched.date ? errors.date : ""}
-                    error={touched.date && Boolean(errors.date)}
-                    onChange={change.bind(null, "date")}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    width="42%"
-                  />
+                    <Input
+                      label="Data"
+                      type="date"
+                      name="date"
+                      value={date}
+                      helperText={touched.date ? errors.date : ""}
+                      error={touched.date && Boolean(errors.date)}
+                      onChange={change.bind(null, "date")}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      width="42%"
+                    />
 
-                  <Input
-                    label="Início"
-                    type="time"
-                    name="startTime"
-                    value={startTime}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    inputProps={{
-                      step: 300, // 5 min
-                    }}
-                    helperText={touched.startTime ? errors.startTime : ""}
-                    error={touched.startTime && Boolean(errors.startTime)}
-                    onChange={change.bind(null, "startTime")}
-                    width="25%"
-                  />
+                    <Input
+                      label="Início"
+                      type="time"
+                      name="startTime"
+                      value={startTime}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      inputProps={{
+                        step: 300, // 5 min
+                      }}
+                      helperText={touched.startTime ? errors.startTime : ""}
+                      error={touched.startTime && Boolean(errors.startTime)}
+                      onChange={change.bind(null, "startTime")}
+                      width="25%"
+                    />
 
-                  <Input
-                    label="Término"
-                    type="time"
-                    name="endTime"
-                    value={endTime}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    inputProps={{
-                      step: 300, // 5 min
-                    }}
-                    helperText={touched.endTime ? errors.endTime : ""}
-                    error={touched.endTime && Boolean(errors.endTime)}
-                    onChange={change.bind(null, "endTime")}
-                    width="25%"
-                  />
+                    <Input
+                      label="Término"
+                      type="time"
+                      name="endTime"
+                      value={endTime}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      inputProps={{
+                        step: 300, // 5 min
+                      }}
+                      helperText={touched.endTime ? errors.endTime : ""}
+                      error={touched.endTime && Boolean(errors.endTime)}
+                      onChange={change.bind(null, "endTime")}
+                      width="25%"
+                    />
 
-                  <Input
-                    label="Endereço"
-                    name='address'
-                    value={address}
-                    helperText={touched.address ? errors.address : ""}
-                    error={touched.address && Boolean(errors.address)}
-                    onChange={change.bind(null, "address")}
-                    width="99%"
-                  />
+                    <Input
+                      label="Endereço"
+                      name='address'
+                      value={address}
+                      helperText={touched.address ? errors.address : ""}
+                      error={touched.address && Boolean(errors.address)}
+                      onChange={change.bind(null, "address")}
+                      width="99%"
+                    />
 
-                  <Input
-                    label="Cidade"
-                    name='city'
-                    value={city}
-                    helperText={touched.city ? errors.city : ""}
-                    error={touched.city && Boolean(errors.city)}
-                    onChange={change.bind(null, "city")}
-                    width="48%"
-                  />
+                    <Input
+                      label="Cidade"
+                      name='city'
+                      value={city}
+                      helperText={touched.city ? errors.city : ""}
+                      error={touched.city && Boolean(errors.city)}
+                      onChange={change.bind(null, "city")}
+                      width="48%"
+                    />
 
-                  <Input
-                    label="Estado"
-                    margin="normal"
-                    name='state'
-                    value={state}
-                    helperText={touched.state ? errors.state : ""}
-                    error={touched.state && Boolean(errors.state)}
-                    onChange={change.bind(null, "state")}
-                    width="47%"
-                  />
+                    <Input
+                      label="Estado"
+                      margin="normal"
+                      name='state'
+                      value={state}
+                      helperText={touched.state ? errors.state : ""}
+                      error={touched.state && Boolean(errors.state)}
+                      onChange={change.bind(null, "state")}
+                      width="47%"
+                    />
 
-                  <Btn type="submit">Salvar</Btn>
-                </Form>
-              )
-            }}
-          </Formik>
+                    <Btn type="submit">Salvar</Btn>
+                    {/* <Btn onClick={}>Salvar</Btn> */}
+                  </Form>
+                )
+              }}
+            </Formik>
 
-        </Body>
-      </Modal>
-    </div >
-  );
+          </Body>
+        </Modal>
+      </div >
+    );
+  }
 }
+
+
+// MAP TO PROPS
+
+interface IMapStateToProps {
+  survey: iSurvey;
+};
+
+const mapStateToProps = (state: IRootState): IMapStateToProps => ({
+  survey: selectSurvey(state),
+});
+
+interface IMapDispatchToProps {
+  surveyCreate: (payload: iSurvey) => void;
+  surveyEdit: (payload: iSurvey, surveyId: string) => void;
+  surveyRequestById: (surveyId: string) => void;
+}
+
+const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
+  surveyCreate: (payload: iSurvey) => dispatch(surveyCreate.started(payload)),
+  surveyEdit: (payload: iSurvey, surveyId: string) => dispatch(surveyEdit.started({ payload, surveyId })),
+  surveyRequestById: (surveyId: string) => dispatch(surveyRequestById.started({surveyId})),
+})
+
 
 // STYLE
-
 const Body = styled.div`
 	  background-color: ${props => props.theme.colors.white};
     position: absolute;
@@ -235,21 +300,22 @@ const Input: any = styled(TextField)<{ width: string }>`
 }
 ` as typeof TextField;
 
-const Btn: any = styled(Button)`
+const Btn = styled(Button)`
 &&{
   margin-top: 20px;
   width: 100%;
   background-color: ${props => props.theme.colors.primary};
   color: ${props => props.theme.colors.white}
 }
-` as typeof TextField;
+` as typeof Button;
 
-const BtnUpload: any = styled(Button)`
-&&{
-  margin-top: 15px;
-  width: 20%;
-  color: ${props => props.theme.colors.gray60}
-}
-` as typeof TextField;
+// const BtnUpload: any = styled(Button)`
+// &&{
+//   margin-top: 15px;
+//   width: 20%;
+//   color: ${props => props.theme.colors.gray60}
+// }
+// ` as typeof Button;
 
-export default ModalCreateSurvey;
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalCreateSurvey);

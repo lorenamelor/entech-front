@@ -4,22 +4,27 @@ import { Observable } from 'rxjs';
 
 // REDUCERS AND EPICS EXPORTS
 
-import appStateReducer, { epics as appStateEpics, init, IState as IAppStateState } from './app/state';
+import { epics as notificationEpics } from './notifications';
+import appStateReducer, { epics as appStateEpics, init, IState as IAppStateState } from './state';
+import surveyReducer, { epics as surveyEpics, IState as ISurveyState } from './survey';
 
 // STORE INTERFACE
-
-export interface IRootState { appState: IAppStateState }
+export interface IRootState { 
+	appState: IAppStateState,
+	surveyReducer: ISurveyState,
+}
 
 // COMBINED REDUCERS
-
 const rootReducer = combineReducers<IRootState>({
 	appState: appStateReducer,
+	surveyReducer,
 });
 
 // COMBINED EPICS
-
 const rootEpic = combineEpics(
+	notificationEpics,
 	appStateEpics,
+	surveyEpics,
 );
 
 export type Epic = (action$: ActionsObservable<Action<any>>, state$: StateObservable<IRootState>) => Observable<Action<any>>;

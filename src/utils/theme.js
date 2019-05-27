@@ -1,6 +1,7 @@
 const colors = {
   primary: '#5dc5d2',
-  red: '#FF4E3D',
+  red: '#e68b8b',
+  orange: '#ffd559',
   white: '#FFFFFF',
   gray10: '#F7F7F7',
   gray20: '#E5E5E5',

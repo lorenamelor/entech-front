@@ -3,7 +3,12 @@ import styled from 'styled-components';
 
 import { AppBar, Button, Toolbar } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import HomeIcon from '@material-ui/icons/Home';
+
 import { Text, ModalCreateSurvey } from '../components';
+import { Link } from 'react-router-dom';
+import theme from '../utils/theme';
+
 
 class ExampleComponent extends React.PureComponent {
 
@@ -15,19 +20,25 @@ class ExampleComponent extends React.PureComponent {
 
 	public render() {
 		const { openModalSurvey } = this.state;
-		console.log('openModalSurvey', openModalSurvey)
 		return (
 			<AppBar position="static">
 				<TabBar>
 					<Text size={30}>Logo</Text>
+					
 					<Menu>
+						<Link to="/">
+							<HomeIcon style={{color: theme.colors.gray60}} />
+						</Link>
+						<Separator />
 						<ButtomAction onClick={this.handleModalSurvey}>
 							<AddIcon fontSize='small' /> Adicionar Evento
 						</ButtomAction>
 						<Text>Sair</Text>
 					</Menu>
+					
 				</TabBar>
-				<ModalCreateSurvey open={true} handleClose={this.handleModalSurvey}/>
+
+				<ModalCreateSurvey open={openModalSurvey} handleClose={this.handleModalSurvey}/>
 			</AppBar>
 		);
 	}
@@ -63,6 +74,14 @@ const ButtomAction = styled(Button)`
 const Menu = styled.div`
 	display: flex;
 	align-items: center;
+`;
+
+const Separator = styled.hr`
+  border: none;
+  border-left: 2px solid ${props => props.theme.colors.gray40};
+  height: 31px;
+  width: 2px;
+  margin-left: 19px;
 `;
 
 export default ExampleComponent;
