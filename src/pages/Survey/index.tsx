@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { TabBar, Text, CardTechShot } from '../../components';
+import { TabBar, Text, CardTechShot, ModalCreateTechShot } from '../../components';
 import { connect } from 'react-redux';
 import { selectSurvey, surveyRequestById } from '../../store/survey';
 import { Dispatch } from 'redux';
@@ -17,14 +17,21 @@ interface IProps {
 }
 class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps & IProps> {
 
+	public state = { openModalTechshot: true };
+
 	public componentDidMount(){
 		const { match: { params: { surveyId } } } = this.props;
 
 		this.props.surveyRequestById(surveyId);
 	}
 
+	public handleModalTechShot = () => {
+		this.setState({openModalTechshot : !this.state.openModalTechshot});
+	}
+
 	public render() {
 		const { title } = this.props.survey;
+		// const { openModalTechshot } = this.state;
 		return(
 			<>
 				<TabBar />
@@ -51,6 +58,7 @@ class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps & 
 						</Info>
 					</InfoContainer>
 					<CardTechShot />
+					<ModalCreateTechShot open={true} handleClose={this.handleModalTechShot}/>
 				</Wrapper>
 			</>
 		);

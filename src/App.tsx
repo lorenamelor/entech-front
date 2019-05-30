@@ -7,7 +7,6 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Pages
-
 import { Home, Survey } from './pages';
 
 class App extends React.Component {

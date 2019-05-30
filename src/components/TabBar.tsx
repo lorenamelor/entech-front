@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 import { AppBar, Button, Toolbar } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import HomeIcon from '@material-ui/icons/Home';
 
 import { Text, ModalCreateSurvey } from '../components';
-import { Link } from 'react-router-dom';
 import theme from '../utils/theme';
 
 
@@ -24,7 +24,6 @@ class ExampleComponent extends React.PureComponent {
 			<AppBar position="static">
 				<TabBar>
 					<Text size={30}>Logo</Text>
-					
 					<Menu>
 						<Link to="/">
 							<HomeIcon style={{color: theme.colors.gray60}} />
@@ -35,7 +34,6 @@ class ExampleComponent extends React.PureComponent {
 						</ButtomAction>
 						<Text>Sair</Text>
 					</Menu>
-					
 				</TabBar>
 
 				<ModalCreateSurvey open={openModalSurvey} handleClose={this.handleModalSurvey}/>

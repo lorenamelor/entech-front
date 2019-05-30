@@ -4,6 +4,7 @@ import CardSurvey from './CardSurvey';
 import Text from './utils/Text';
 import ModalCreateSurvey from './ModalCreateSurvey';
 import ModalConfirmation from './ModalConfirmation';
+import ModalCreateTechShot from './ModalCreateTechShot';
 import CardTechShot from './CardTechShot';
 
 export {
@@ -13,5 +14,6 @@ export {
 	CardSurvey,
 	ModalCreateSurvey,
 	ModalConfirmation,
+	ModalCreateTechShot,
 	CardTechShot,
 };

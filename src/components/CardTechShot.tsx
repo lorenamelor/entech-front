@@ -11,7 +11,8 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
+import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
 import TimerIcon from '@material-ui/icons/Timer';
 import PersonIcon from '@material-ui/icons/Person';
 
@@ -48,30 +49,33 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps> {
           id="panel1a-header"
         >
           <Summary>
-            <Header>
-              <Text bold size={15}> Teach Shot </Text>
-              <Container>
-                <BtnAction color={theme.colors.orange} onClick={this.handleModalEdit}>
-                  Editar
+            <Photo alt="Remy Sharp" src="https://www.beddingwarehouse.com.au/wp-content/uploads/2016/01/placeholder-featured-image.png" />
+            <SummaryInfo>
+              <Header>
+                <Text bold size={15}> Teach Shot </Text>
+                <Container>
+                  <BtnAction color={theme.colors.orange} onClick={this.handleModalEdit}>
+                    Editar
               </BtnAction>
-                <BtnAction color={theme.colors.red} onClick={this.handleModalDelete}>
-                  Excluir
+                  <BtnAction color={theme.colors.red} onClick={this.handleModalDelete}>
+                    Excluir
               </BtnAction>
-              </Container>
-            </Header>
+                </Container>
+              </Header>
 
-            <InfoContainer>
-              <Info>
-                <PersonIcon style={{ color: theme.colors.gray60 }} />
-                <Text bold> Palestrante: </Text>
-                <Text> Lorena Carla </Text>
-              </Info>
-              <Info>
-                <TimerIcon style={{ color: theme.colors.gray60 }} />
-                <Text bold> Duração: </Text>
-                <Text> 60 min </Text>
-              </Info>
-            </InfoContainer>
+              <InfoContainer>
+                <Info>
+                  <PersonIcon style={{ color: theme.colors.gray60 }} />
+                  <Text bold> Palestrante: </Text>
+                  <Text> Lorena Carla </Text>
+                </Info>
+                <Info>
+                  <TimerIcon style={{ color: theme.colors.gray60 }} />
+                  <Text bold> Duração: </Text>
+                  <Text> 60 min </Text>
+                </Info>
+              </InfoContainer>
+            </SummaryInfo>
           </Summary>
 
           <Container>
@@ -80,7 +84,7 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps> {
               <Text>votos</Text>
             </Votes>
 
-          <Separator/>
+            <Separator />
 
             <BtnVote>
               Votar
@@ -89,12 +93,20 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps> {
 
         </ExpansionPanelSummary>
         <Details>
-        <Text bold>Sobre:</Text>
-        <Text>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac arcu a dui consequat placerat.
-          Nam rhoncus, quam a feugiat vehicula, dolor urna ultrices nisi, in placerat ligula neque egestas
-          ipsum.
+          <Text bold>Sobre:</Text>
+          <Text>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac arcu a dui consequat placerat.
+            Nam rhoncus, quam a feugiat vehicula, dolor urna ultrices nisi, in placerat ligula neque egestas
+            ipsum.
         </Text>
+        </Details>
+        <Details>
+          <Text bold>Palavras Chaves:</Text>
+          <ContainerChips>
+            <ChipWords label="React"/>
+            <ChipWords label="Front-end"/>
+            <ChipWords label="JavaScript"/>
+          </ContainerChips>
         </Details>
       </CardWrapper>
 
@@ -124,12 +136,18 @@ const CardWrapper = styled(ExpansionPanel)`
 }
 ` as typeof ExpansionPanel;
 
-const Summary = styled.div`
+const SummaryInfo = styled.div`
   display: flex;
   width: 100%;
   flex: 1;
   flex-direction: column;
   justify-content: flex-start;
+`;
+
+const Summary = styled.div`
+  display: flex;
+  width: 100%;
+  flex: 1;
 `;
 
 const Details = styled(ExpansionPanelDetails)`
@@ -150,6 +168,14 @@ const Container = styled.div`
   display: flex;
   align-items: center;
 `;
+
+const Photo: any = styled(Avatar)`
+&&{
+  margin-right: 20px;
+  height: 60px;
+  width: 60px;
+}
+` as typeof Avatar;
 
 const Votes = styled.div`
   display: flex;
@@ -206,4 +232,18 @@ const BtnVote: any = styled(Button)`
 }
 ` as typeof Button;
 
+const ChipWords: any = styled(Chip)`
+&&{
+  background-color: ${props => props.theme.colors.primary};
+  color: ${props => props.theme.colors.white};
+  font-size: 15px;
+  margin: 4px 6px 0px 0px;
+  align-items: center;
+}
+` as typeof Button;
+
+const ContainerChips = styled.div`
+  display: flex;
+  align-items: center;
+`;
 export default connect(null, mapDispatchToProps)(CardTechShot);
