@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Button } from '@material-ui/core';
-import { Text } from '.';
+import { Text, ModalCreateTechShot, ModalConfirmation } from '../components';
+
 import theme from '../utils/theme';
 import { Dispatch } from 'redux';
-import { surveyDelete } from '../store/survey';
 import { connect } from 'react-redux';
-
+import map from 'lodash/map';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -15,8 +15,16 @@ import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import TimerIcon from '@material-ui/icons/Timer';
 import PersonIcon from '@material-ui/icons/Person';
+import { ITechShot } from '../utils/interfaces';
+import { techshotDelete } from '../store/techShot';
 
-class CardTechShot extends React.PureComponent<IMapDispatchToProps> {
+interface IProps {
+  techshot: ITechShot;    
+  expanded: string,
+  handleChangePanel: (id: string) => () => void;
+}
+
+class CardTechShot extends React.PureComponent<IMapDispatchToProps & IProps> {
 
   public state = {
     openModalEdit: false,
@@ -31,18 +39,18 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps> {
     this.setState({ openModalDelete: !this.state.openModalDelete });
   }
 
-  public handleSurveyDelete = (surveyId: string) => () => {
-    this.props.surveyDelete(surveyId);
+  public handleTechshotDelete = (techshotId: string) => () => {
+    this.props.techshotDelete(techshotId);
     this.handleModalDelete();
   }
 
   public render() {
-    // const { _id, title, } = this.props.survey;
-    // const { openModalEdit, openModalDelete } = this.state;
+    const { openModalEdit, openModalDelete } = this.state;
+    const { expanded, techshot, handleChangePanel } = this.props;
+    const { _id, title, duration, keywords, speaker, description, surveyId } = techshot;
 
     return (
-      <CardWrapper>
-
+      <CardWrapper onChange={handleChangePanel(_id!)} expanded={expanded === _id}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -52,7 +60,7 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps> {
             <Photo alt="Remy Sharp" src="https://www.beddingwarehouse.com.au/wp-content/uploads/2016/01/placeholder-featured-image.png" />
             <SummaryInfo>
               <Header>
-                <Text bold size={15}> Teach Shot </Text>
+                <Text bold size={15}> {title} </Text>
                 <Container>
                   <BtnAction color={theme.colors.orange} onClick={this.handleModalEdit}>
                     Editar
@@ -67,12 +75,12 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps> {
                 <Info>
                   <PersonIcon style={{ color: theme.colors.gray60 }} />
                   <Text bold> Palestrante: </Text>
-                  <Text> Lorena Carla </Text>
+                  <Text> {speaker} </Text>
                 </Info>
                 <Info>
                   <TimerIcon style={{ color: theme.colors.gray60 }} />
                   <Text bold> Duração: </Text>
-                  <Text> 60 min </Text>
+                  <Text> {duration} min </Text>
                 </Info>
               </InfoContainer>
             </SummaryInfo>
@@ -83,44 +91,51 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps> {
               <Text bold size={22}> 32 </Text>
               <Text>votos</Text>
             </Votes>
-
             <Separator />
-
             <BtnVote>
               Votar
             </BtnVote>
           </Container>
-
         </ExpansionPanelSummary>
+
         <Details>
           <Text bold>Sobre:</Text>
           <Text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac arcu a dui consequat placerat.
-            Nam rhoncus, quam a feugiat vehicula, dolor urna ultrices nisi, in placerat ligula neque egestas
-            ipsum.
+           {description}
         </Text>
         </Details>
         <Details>
           <Text bold>Palavras Chaves:</Text>
           <ContainerChips>
-            <ChipWords label="React"/>
-            <ChipWords label="Front-end"/>
-            <ChipWords label="JavaScript"/>
+            {map(keywords, keyword => <ChipWords key={keyword} label={keyword} />)}
           </ContainerChips>
         </Details>
-      </CardWrapper>
 
+        { openModalEdit && <ModalCreateTechShot 
+          open={openModalEdit} 
+          handleClose={this.handleModalEdit} 
+          techshotId={_id}
+          surveyId={surveyId!}/>
+        }
+        { openModalDelete && <ModalConfirmation 
+          text={`Deseja mesmo apagar a techshot "${title}" ?`}
+          open={openModalDelete} 
+          handleClose={this.handleModalDelete} 
+          action={this.handleTechshotDelete(_id!)}/>
+        }
+
+      </CardWrapper>
     );
   }
 }
 
 // MAP TO PROPS
 interface IMapDispatchToProps {
-  surveyDelete: (surveyId: string) => void;
+  techshotDelete: (techshotId: string) => void;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
-  surveyDelete: (surveyId: string) => dispatch(surveyDelete.started({ surveyId })),
+  techshotDelete: (techshotId: string) => dispatch(techshotDelete.started({ techshotId })),
 })
 
 

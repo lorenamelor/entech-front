@@ -18,7 +18,7 @@ import { iSurvey } from '../utils/interfaces';
 // SELECTORS
 export const selectSurveys: Selector<iSurvey[]> = ({ surveyReducer }) => surveyReducer.surveys;
 export const selectSurvey: Selector<iSurvey> = ({ surveyReducer }) => surveyReducer.survey;
-
+export const selectSurveyAction: Selector<boolean> = ({ surveyReducer }) => surveyReducer.surveyAction;
 
 // ACTIONS
 const actionCreator = actionCreatorFactory('SURVEY::');
@@ -27,11 +27,14 @@ export const surveyEdit = actionCreator.async<any, any, any>('EDIT');
 export const surveyDelete = actionCreator.async<any, any, any>('DELETE');
 export const surveyRequest = actionCreator.async<any, any, any>('REQUEST');
 export const surveyRequestById = actionCreator.async<any, any, any>('REQUEST_BY_ID');
+export const surveyActionDone = actionCreator('SURVEY_ACTION_DONE');
+
 
 // STATE
 export interface IState {
   surveys: iSurvey[],
-  survey: iSurvey,
+	survey: iSurvey,
+	surveyAction: boolean,
 }
 
 const INITIAL_STATE: IState = {
@@ -47,7 +50,8 @@ const INITIAL_STATE: IState = {
   address: '',
   city: '',
   state: '',
-  photoURL: ''},
+	photoURL: ''},
+	surveyAction: false,
 };
 
 // REDUCER
@@ -59,6 +63,10 @@ export default reducerWithInitialState(INITIAL_STATE)
   .case(surveyRequestById.done, (state: IState, { result: survey }) => ({
 		...state,
 		survey,
+	}))
+	.cases([surveyCreate.done, surveyEdit.done, surveyDelete.done, surveyActionDone], (state: IState) => ({
+		...state,
+		surveyAction: !state.surveyAction,
 	}))
 	.build();
 
@@ -96,29 +104,29 @@ const surveyRequestEpic: Epic = (action$) => action$.pipe(
 	)),
 ));
 
-const surveyRequest2Epic: Epic = (action$) => action$.pipe(
-	filter(surveyCreate.done.match),
-	mergeMap(() => from(apiSurveyRequest()).pipe(
-		map((surveys) => (surveyRequest.done({ result: surveys })),
-		catchError((error) => of(surveyRequest.failed({ error }))),
-	)),
-));
+// const surveyRequest2Epic: Epic = (action$) => action$.pipe(
+// 	filter(surveyCreate.done.match),
+// 	mergeMap(() => from(apiSurveyRequest()).pipe(
+// 		map((surveys) => (surveyRequest.done({ result: surveys })),
+// 		catchError((error) => of(surveyRequest.failed({ error }))),
+// 	)),
+// ));
 
-const surveyRequest3Epic: Epic = (action$) => action$.pipe(
-	filter(surveyEdit.done.match),
-	mergeMap(() => from(apiSurveyRequest()).pipe(
-		map((surveys) => (surveyRequest.done({ result: surveys })),
-		catchError((error) => of(surveyRequest.failed({ error }))),
-	)),
-));
+// const surveyRequest3Epic: Epic = (action$) => action$.pipe(
+// 	filter(surveyEdit.done.match),
+// 	mergeMap(() => from(apiSurveyRequest()).pipe(
+// 		map((surveys) => (surveyRequest.done({ result: surveys })),
+// 		catchError((error) => of(surveyRequest.failed({ error }))),
+// 	)),
+// ));
 
-const surveyRequest4Epic: Epic = (action$) => action$.pipe(
-	filter(surveyDelete.done.match),
-	mergeMap(() => from(apiSurveyRequest()).pipe(
-		map((surveys) => (surveyRequest.done({ result: surveys })),
-		catchError((error) => of(surveyRequest.failed({ error }))),
-	)),
-));
+// const surveyRequest4Epic: Epic = (action$) => action$.pipe(
+// 	filter(surveyDelete.done.match),
+// 	mergeMap(() => from(apiSurveyRequest()).pipe(
+// 		map((surveys) => (surveyRequest.done({ result: surveys })),
+// 		catchError((error) => of(surveyRequest.failed({ error }))),
+// 	)),
+// ));
 
 const surveyRequestByIdEpic: Epic = (action$) => action$.pipe(
 	filter(surveyRequestById.started.match),
@@ -131,9 +139,6 @@ const surveyRequestByIdEpic: Epic = (action$) => action$.pipe(
 export const epics = combineEpics(
   surveyCreateEpic,
   surveyRequestEpic,
-  surveyRequest2Epic,
-  surveyRequest3Epic,
-  surveyRequest4Epic,
   surveyEditEpic,
   surveyDeleteEpic,
   surveyRequestByIdEpic,

@@ -12,3 +12,15 @@ export interface iSurvey {
   photoURL?: string,
   userId?: string,
 }
+
+export interface ITechShot {
+  _id?: string,
+  title: string,
+  speaker: string,
+  photoURL?: string,
+  keywords?: Array<string>
+  duration: number,
+  description: string,
+  userId?: string,
+  surveyId?: string,
+}

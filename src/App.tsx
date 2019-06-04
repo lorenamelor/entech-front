@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Pages
-import { Home, Survey } from './pages';
+import { Home, Survey, SignUp } from './pages';
 
 class App extends React.Component {
   public render() {
@@ -24,8 +24,8 @@ class App extends React.Component {
           draggable
           pauseOnHover
         />
-
-          <Route exact path='/' component={Home} />
+          <Route exact path='/signup' component={SignUp} />
+          <Route exact path='/home' component={Home} />
           <Route exact path='/survey/:surveyId' component={Survey} />
         </div>
       </ThemeProvider>

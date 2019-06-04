@@ -5,8 +5,11 @@ import { Epic } from '.';
 import { css } from 'glamor';
 import { filter, mapTo, tap } from 'rxjs/operators';
 import actionCreatorFactory from 'typescript-fsa';
-import { surveyCreate, surveyEdit, surveyDelete } from './survey';
 import theme from '../utils/theme';
+
+import { surveyCreate, surveyEdit, surveyDelete } from './survey';
+import { techshotCreate, techshotEdit, techshotDelete } from './techShot';
+
 
 const actionCreator = actionCreatorFactory('APP::NOTIFICATION');
 export const showToast = actionCreator('SHOW_TOAST');
@@ -17,6 +20,7 @@ const toatSuccess = (msg: any) => toast.success(msg, {
   })
 })
 
+//  SURVEYS
 const surveyCreateSuccessEpic: Epic = (action$: any) => action$.pipe(
   filter(surveyCreate.done.match),
   tap(() => toatSuccess("Enquete Criada!")),
@@ -35,8 +39,32 @@ const surveyDeleteSuccessEpic: Epic = (action$: any) => action$.pipe(
   mapTo(showToast())
 )
 
+// TECHSHOTS
+
+const techshotCreateSuccessEpic: Epic = (action$: any) => action$.pipe(
+  filter(techshotCreate.done.match),
+  tap(() => toatSuccess("Techshot Criada!")),
+  mapTo(showToast())
+)
+
+const techshotEditSuccessEpic: Epic = (action$: any) => action$.pipe(
+  filter(techshotEdit.done.match),
+  tap(() => toatSuccess("Techshot Editada!")),
+  mapTo(showToast())
+)
+
+const techshotDeleteSuccessEpic: Epic = (action$: any) => action$.pipe(
+  filter(techshotDelete.done.match),
+  tap(() => toatSuccess("Techshot Deletada!")),
+  mapTo(showToast())
+)
+
 export const epics = combineEpics(
   surveyCreateSuccessEpic,
   surveyEditSuccessEpic,
   surveyDeleteSuccessEpic,
+
+  techshotCreateSuccessEpic,
+  techshotEditSuccessEpic,
+  techshotDeleteSuccessEpic,
 );

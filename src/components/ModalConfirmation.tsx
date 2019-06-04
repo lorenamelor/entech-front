@@ -69,7 +69,7 @@ const Btn: any = styled(Button)<{cancel: boolean}>`
 &&{
   margin-top: 20px;
   width: 48%;
-  background-color: ${props => props.cancel ? props.theme.colors.gray30 : props.theme.colors.primary};
+  background-color: ${props => props.cancel ? props.theme.colors.gray30 : props.theme.colors.red};
   color: ${props => props.theme.colors.white}
 }
 ` as typeof Button;

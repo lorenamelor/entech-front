@@ -6,6 +6,7 @@ import ModalCreateSurvey from './ModalCreateSurvey';
 import ModalConfirmation from './ModalConfirmation';
 import ModalCreateTechShot from './ModalCreateTechShot';
 import CardTechShot from './CardTechShot';
+import FormSignUp from './FormSignUp';
 
 export {
 	TabBar,
@@ -16,4 +17,5 @@ export {
 	ModalConfirmation,
 	ModalCreateTechShot,
 	CardTechShot,
+	FormSignUp,
 };

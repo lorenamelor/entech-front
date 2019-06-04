@@ -3,55 +3,55 @@ import { Dispatch } from 'redux';
 import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { IRootState } from '../store';
 
 import { Modal, TextField, Button } from '@material-ui/core';
 import ChipInput from 'material-ui-chip-input'
-
-// import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { Text } from '../components';
 
-import { iSurvey } from '../utils/interfaces';
-import { surveyCreate, surveyEdit, selectSurvey, surveyRequestById } from '../store/survey';
-import { connect } from 'react-redux';
-import { IRootState } from '../store';
+import { ITechShot } from '../utils/interfaces';
+import { techshotCreate, techshotEdit, selectTechshot, techshotRequestById } from '../store/techShot';
+
 
 interface IProps {
   open: boolean;
   handleClose: () => void;
   techshotId?: string;
-  techshot?: any;
+  surveyId: string;
 }
 
 const validationForm = Yup.object().shape({
   title: Yup.string().required("Campo obrigatório"),
   duration: Yup.string().required("Campo obrigatório"),
   description: Yup.string().required("Campo obrigatório"),
+  speaker: Yup.string().required("Campo obrigatório"),
   photoURL: Yup.string(),
   keywords: Yup.array(),
 });
 
 const initialValues = {
   title: '',
-  duration: '',
+  duration: 0,
   description: '',
   photoURL: '',
+  speaker:'',
   keywords: [],
 }
 
-class ModalCreateSurvey extends React.PureComponent<IProps & IMapDispatchToProps & IMapStateToProps> {
+class ModalCreateTeachShot extends React.PureComponent<IProps & IMapDispatchToProps & IMapStateToProps> {
 
   public componentDidMount() {
-    // const { techshotId } = this.props;
+    const { techshotId } = this.props;
 
-    // if(techshotId){
-    //   this.props.surveyRequestById(techshotId);
-    // }
-
-    
+    if(techshotId){
+      this.props.techshotRequestById(techshotId);
+    }
   }
 
   public render() {
-    const { open, handleClose, techshot, techshotId } = this.props;
+    const { open, handleClose, techshot, techshotId, surveyId } = this.props;
     return (
       <div>
         <Modal
@@ -72,18 +72,20 @@ class ModalCreateSurvey extends React.PureComponent<IProps & IMapDispatchToProps
 
                 const payload = {
                   ...values,
-                  userId: "5ce030c9d323f326247f3122"
+                  userId: "5ce030c9d323f326247f3122",
+                  surveyId
                 }
 
                 techshotId
-                  ? this.props.surveyEdit(payload, techshotId)
-                  : this.props.surveyCreate(payload);
+                  ? this.props.techshotEdit(payload, techshotId)
+                  : this.props.techshotCreate(payload);
                 handleClose();
               }}
             >
               {({ errors, touched, values: {
                 title,
                 duration,
+                speaker,
                 description,
                 photoURL,
                 keywords,
@@ -91,15 +93,22 @@ class ModalCreateSurvey extends React.PureComponent<IProps & IMapDispatchToProps
                 handleChange, setFieldTouched, setFieldValue }) => {
 
                 const change = (nameInput: any, e: any) => {
-                  if (nameInput === 'keywords'){
-                    console.log(e)
-                    const value = [...keywords, e];
-                    setFieldValue(name, value)
-                  }else {
+                  if (nameInput === 'keywords') {
+                    const value = [...keywords!, e];
+                    setFieldValue('keywords', value)
+                    handleChange(value);
+                  } else {
                     e.persist();
                     handleChange(e);
                   }
+
                   setFieldTouched(nameInput, true, false);
+                };
+
+                const deleteKeyword = (chip: any, index: any) => {
+                  const value = keywords!.filter((val: any, idx: any) => idx !== index)
+                  setFieldValue('keywords', value)
+                  handleChange(value);
                 };
 
                 return (
@@ -123,7 +132,18 @@ class ModalCreateSurvey extends React.PureComponent<IProps & IMapDispatchToProps
                       onChange={change.bind(null, "description")}
                       width="99%"
                       multiline
+                      rows="4"
                       rowsMax="4"
+                    />
+
+                    <Input
+                      label="Palestrante"
+                      name='speaker'
+                      value={speaker}
+                      helperText={touched.speaker ? errors.speaker : ""}
+                      error={touched.speaker && Boolean(errors.speaker)}
+                      onChange={change.bind(null, "speaker")}
+                      width="55%"
                     />
 
                     <Input
@@ -134,19 +154,10 @@ class ModalCreateSurvey extends React.PureComponent<IProps & IMapDispatchToProps
                       helperText={touched.duration ? errors.duration : ""}
                       error={touched.duration && Boolean(errors.duration)}
                       onChange={change.bind(null, "duration")}
-                      width="30%"
+                      width="20%"
                     />
 
-                    <ChipInput
-                      defaultValue={keywords}
-                      // name='keywords'
-                      label='Palavras Chaves'
-                      onAdd={change.bind(null, "keywords")}
-                      // onDelete={(chip, index) => handleDeleteChip(chip, index)}
-                      value={keywords}
-                    />
-
-                    {/* <input
+                    <input
                       accept="image/*"
                       id="button-file"
                       multiple
@@ -161,10 +172,20 @@ class ModalCreateSurvey extends React.PureComponent<IProps & IMapDispatchToProps
                         <CloudUploadIcon style={{ marginRight: 3 }} />
                         Foto
                     </BtnUpload>
-                    </label> */}
+                    </label>
+
+                    <InputChip
+                      defaultValue={keywords}
+                      name='keywords'
+                      label='Palavras Chaves'
+                      onAdd={change.bind(null, "keywords")}
+                      onDelete={(chip: any, index: any) => deleteKeyword(chip, index)}
+                      value={keywords}
+                      width="100%"
+                    />
 
                     <Btn type="submit">Salvar</Btn>
-                    {/* <Btn onClick={}>Salvar</Btn> */}
+                    {/* <Btn onClick={}>Cancela</Btn> */}
                   </Form>
                 )
               }}
@@ -179,25 +200,24 @@ class ModalCreateSurvey extends React.PureComponent<IProps & IMapDispatchToProps
 
 
 // MAP TO PROPS
-
 interface IMapStateToProps {
-  survey: iSurvey;
+  techshot: ITechShot;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({
-  survey: selectSurvey(state),
+  techshot: selectTechshot(state),
 });
 
 interface IMapDispatchToProps {
-  surveyCreate: (payload: iSurvey) => void;
-  surveyEdit: (payload: iSurvey, techshotId: string) => void;
-  surveyRequestById: (techshotId: string) => void;
+  techshotCreate: (payload: ITechShot) => void;
+  techshotEdit: (payload: ITechShot, techshotId: string) => void;
+  techshotRequestById: (techshotId: string) => void;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
-  surveyCreate: (payload: iSurvey) => dispatch(surveyCreate.started(payload)),
-  surveyEdit: (payload: iSurvey, techshotId: string) => dispatch(surveyEdit.started({ payload, techshotId })),
-  surveyRequestById: (techshotId: string) => dispatch(surveyRequestById.started({ techshotId })),
+  techshotCreate: (payload: ITechShot) => dispatch(techshotCreate.started(payload)),
+  techshotEdit: (payload: ITechShot, techshotId: string) => dispatch(techshotEdit.started({ payload, techshotId })),
+  techshotRequestById: (techshotId: string) => dispatch(techshotRequestById.started({ techshotId })),
 })
 
 
@@ -219,12 +239,19 @@ const Body = styled.div`
     justify-content: center;
 `;
 
-const Input: any = styled(TextField) <{ width: string }>`
+const Input: any = styled(TextField)<{ width: string }>`
 &&{
   margin: 5px;
   width: ${props => props.width};
 }
 ` as typeof TextField;
+
+const InputChip: any = styled(ChipInput)<{ width: string }>`
+&&{
+  margin: 5px;
+  width: ${props => props.width};
+}
+` as typeof ChipInput;
 
 const Btn = styled(Button)`
 &&{
@@ -235,13 +262,13 @@ const Btn = styled(Button)`
 }
 ` as typeof Button;
 
-// const BtnUpload: any = styled(Button)`
-// &&{
-//   margin-top: 15px;
-//   width: 20%;
-//   color: ${props => props.theme.colors.gray60}
-// }
-// ` as typeof Button;
+const BtnUpload: any = styled(Button)`
+&&{
+  margin-top: 15px;
+  width: 20%;
+  color: ${props => props.theme.colors.gray60}
+}
+` as typeof Button;
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalCreateSurvey);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalCreateTeachShot);

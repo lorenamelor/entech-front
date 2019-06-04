@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 interface IProps {
-  children: string
+  children: any
   size?: number;
   color?: string;
   bold?: boolean;
