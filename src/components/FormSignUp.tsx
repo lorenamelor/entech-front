@@ -11,7 +11,7 @@ import { Text } from '../components';
 
 import { ITechShot } from '../utils/interfaces';
 import { techshotCreate, techshotEdit, selectTechshot, techshotRequestById } from '../store/techShot';
-import meetupLogo from '../../assets/imgs/meetup-logo.png';
+// import meetupLogo from '../../assets/imgs/meetup-logo.png';
 
 
 const validationForm = Yup.object().shape({
@@ -121,7 +121,7 @@ class FormSignUp extends React.PureComponent<IMapDispatchToProps & IMapStateToPr
                     />
 
                     <Btn type="submit">Salvar</Btn>
-                    <Btn oauth>Continuar com o <Image src={meetupLogo}/></Btn>
+                    {/* <Btn oauth>Continuar com o <Image src={meetupLogo}/></Btn> */}
                   </Form>
                 )
               }}
@@ -190,9 +190,9 @@ const Btn: any = styled(Button)<{ oauth?: boolean }>`
 }
 ` as typeof Button;
 
-const Image = styled.img`
-  width: 80px;
-  height: 30px;
-`;
+// const Image = styled.img`
+//   width: 80px;
+//   height: 30px;
+// `;
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormSignUp);

@@ -5,11 +5,11 @@ import { iSurvey, ITechShot } from '../utils/interfaces';
 
 export async function apiSurveyCreate(payload: iSurvey): Promise<{ data: { msg: any } }>  {
 	const headers: any = {};
-	return axios.post(`http://localhost:8000/surveys`, payload , { headers });
+	return axios.post(`https://tecweb-entech.azurewebsites.net/surveys`, payload , { headers });
 }
 
 export async function apiSurveyRequest(): Promise<any>  {
-	const surveys: any = await axios.get(`http://localhost:8000/surveys`);
+	const surveys: any = await axios.get(`https://tecweb-entech.azurewebsites.net/surveys`);
 	return surveys.data;
 }
 
@@ -17,17 +17,17 @@ export async function apiSurveyEdit(payload: iSurvey, surveyId:string): Promise<
 	delete payload._id;
 
 	const headers: any = {};
-	return axios.put(`http://localhost:8000/surveys/${surveyId}`, payload , { headers });
+	return axios.put(`https://tecweb-entech.azurewebsites.net/surveys/${surveyId}`, payload , { headers });
 }
 
 export async function apiSurveyDelete(surveyId:string): Promise<any>  {
 	const headers: any = {};
-	return axios.delete(`http://localhost:8000/surveys/${surveyId}`, { headers });
+	return axios.delete(`https://tecweb-entech.azurewebsites.net/surveys/${surveyId}`, { headers });
 }
 
 export async function apiSurveyRequestById(surveyId:string): Promise<iSurvey>  {
 	const headers: any = {};
-	const response = await axios.get(`http://localhost:8000/surveys/${surveyId}`, { headers });
+	const response = await axios.get(`https://tecweb-entech.azurewebsites.net/surveys/${surveyId}`, { headers });
 	const survey: iSurvey = response.data;
 	survey.date = (survey.date).split('T')[0];
 	survey.surveyEndDate = (survey.surveyEndDate).split('T')[0];

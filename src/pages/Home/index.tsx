@@ -7,16 +7,15 @@ import { IRootState } from '../../store';
 import { iSurvey } from '../../utils/interfaces';
 
 import { TabBar, CardPhoto, CardSurvey, Text, ModalCreateSurvey } from '../../components';
-import { Button } from '@material-ui/core';
+import { Button, CircularProgress } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import {
 	surveyRequest,
 	selectSurveys,
 	selectSurveyAction,
-	surveyActionDone
+	surveyActionDone,
+	selectIsRequestSurvey
 } from '../../store/survey';
-
-
 
 class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
 
@@ -38,7 +37,7 @@ class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
 	}
 
 	public render() {
-		const { surveys } = this.props;
+		const { surveys, isRequestSurvey } = this.props;
 		const { openModalSurvey } = this.state;
 
 		return (
@@ -64,8 +63,10 @@ class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
 						Enquetes
 						</Text>
 					<Group>
-						{map(surveys, (survey) => (
-							<CardSurvey key={survey._id} survey={survey} />
+						{isRequestSurvey
+							? <CircularProgress /> 
+							: map(surveys, (survey) => (
+								<CardSurvey key={survey._id} survey={survey} />
 						))}
 					</Group>
 				</Wrapper>
@@ -79,11 +80,13 @@ class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
 interface IMapStateToProps {
 	surveys: iSurvey[];
 	surveyAction: boolean;
+	isRequestSurvey: boolean;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({
 	surveys: selectSurveys(state),
 	surveyAction: selectSurveyAction(state),
+	isRequestSurvey: selectIsRequestSurvey(state),
 });
 interface IMapDispatchToProps {
 	surveyRequest: () => void;
