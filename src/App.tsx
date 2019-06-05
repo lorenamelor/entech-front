@@ -25,7 +25,7 @@ class App extends React.Component {
           pauseOnHover
         />
           <Route exact path='/signup' component={SignUp} />
-          <Route exact path='/home' component={Home} />
+          <Route exact path='/' component={Home} />
           <Route exact path='/survey/:surveyId' component={Survey} />
         </div>
       </ThemeProvider>
