@@ -6,27 +6,32 @@ import { Observable } from 'rxjs';
 
 import { epics as notificationEpics } from './notifications';
 import appStateReducer, { epics as appStateEpics, init, IState as IAppStateState } from './state';
+import userReducer, { epics as userEpics, IState as IUserState } from './user';
 import surveyReducer, { epics as surveyEpics, IState as ISurveyState } from './survey';
 import techshotReducer, { epics as techshotEpics, IState as ITechshotState } from './techShot';
+
 
 // STORE INTERFACE
 export interface IRootState { 
 	appState: IAppStateState,
 	surveyReducer: ISurveyState,
 	techshotReducer: ITechshotState,
+	userReducer: IUserState,
 }
 
 // COMBINED REDUCERS
 const rootReducer = combineReducers<IRootState>({
 	appState: appStateReducer,
+	userReducer,
 	surveyReducer,
 	techshotReducer,
 });
 
 // COMBINED EPICS
 const rootEpic = combineEpics(
-	notificationEpics,
 	appStateEpics,
+	userEpics,
+	notificationEpics,
 	surveyEpics,
 	techshotEpics,
 );

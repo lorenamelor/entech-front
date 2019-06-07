@@ -1,3 +1,12 @@
+export interface IUser {
+  _id?: string,
+  name: string,
+  email: string,
+  type: string,
+  password: string,
+  confirmPassword?:string,
+}
+
 export interface iSurvey {
   _id?: string,
   title: string,

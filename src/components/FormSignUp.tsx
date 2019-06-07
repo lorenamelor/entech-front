@@ -1,18 +1,16 @@
 import * as React from 'react';
 import { Dispatch } from 'redux';
-import * as Yup from 'yup';
-import { Form, Formik } from 'formik';
-import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { TextField, Button, CircularProgress } from '@material-ui/core';
+import styled from 'styled-components';
+import { Form, Formik } from 'formik';
+import * as Yup from 'yup';
+
 import { IRootState } from '../store';
-
-import { Modal, TextField, Button } from '@material-ui/core';
-import { Text } from '../components';
-
-import { ITechShot } from '../utils/interfaces';
-import { techshotCreate, techshotEdit, selectTechshot, techshotRequestById } from '../store/techShot';
-// import meetupLogo from '../../assets/imgs/meetup-logo.png';
-
+import { IUser } from '../utils/interfaces';
+import { userCreate } from '../store/user';
+import { selectIsCreateUser, selectSignUpSuccess } from '../store/user';
 
 const validationForm = Yup.object().shape({
   name: Yup.string()
@@ -26,7 +24,7 @@ const validationForm = Yup.object().shape({
     .matches(/[0-9]/, 'Deve conter números'),
   confirmPassword: Yup.string()
     .required("Confirmar senha é obrigatório")
-    .oneOf([Yup.ref("senha")], "As senhas não conferem")
+    .oneOf([Yup.ref("confirmPassword")], "As senhas não conferem")
 });
 
 const initialValues = {
@@ -35,32 +33,26 @@ const initialValues = {
   password: '',
   confirmPassword: '',
 }
-
 class FormSignUp extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
-
   public render() {
+
+    const { isCreateUser, signUpSuccess } = this.props;
+
+    if(signUpSuccess) { return <Redirect to="/" /> }
     return (
-      <div>
-        <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          hideBackdrop={true}
-          open={true}
-        >
-          <Body>
-            <Text size={22}>CADASTRO</Text>
+      <Wrapper>
+            <Title>JUNTE-SE À COMUNIDADE</Title>
 
             <Formik
               initialValues={initialValues}
               enableReinitialize
               validationSchema={validationForm}
               onSubmit={values => {
-                // const payload = {
-                //   ...values,
-                //   userId: "5ce030c9d323f326247f3122",
-                // }
-
-                // this.props.techshotCreate(payload);
+                const payload = {
+                  ...values,
+                  type: "participant",
+                }
+                this.props.userCreate(payload);
               }}
             >
               {({ errors, touched, values: {
@@ -69,14 +61,13 @@ class FormSignUp extends React.PureComponent<IMapDispatchToProps & IMapStateToPr
                 password,
                 confirmPassword,
               },
-                handleChange, setFieldTouched, setFieldValue }) => {
+                handleChange, setFieldTouched }) => {
 
                 const change = (nameInput: any, e: any) => {
                   e.persist();
                   handleChange(e);
                   setFieldTouched(nameInput, true, false);
                 };
-
 
                 return (
                   <Form>
@@ -107,6 +98,7 @@ class FormSignUp extends React.PureComponent<IMapDispatchToProps & IMapStateToPr
                       helperText={touched.password ? errors.password : ""}
                       error={touched.password && Boolean(errors.password)}
                       onChange={change.bind(null, "password")}
+                      type="password"
                       width="99%"
                     />
 
@@ -117,57 +109,47 @@ class FormSignUp extends React.PureComponent<IMapDispatchToProps & IMapStateToPr
                       helperText={touched.confirmPassword ? errors.confirmPassword : ""}
                       error={touched.confirmPassword && Boolean(errors.confirmPassword)}
                       onChange={change.bind(null, "confirmPassword")}
+                      type="password"
                       width="99%"
                     />
 
-                    <Btn type="submit">Salvar</Btn>
-                    {/* <Btn oauth>Continuar com o <Image src={meetupLogo}/></Btn> */}
+                    <Btn type="submit">{isCreateUser ? <Spinner size={20}/>: 'Salvar'}</Btn>
+                    <Btn oauth>
+                      Continuar com o <Image src={require("../assets/imgs/meetup-logo.png")}/>
+                    </Btn>
                   </Form>
                 )
               }}
             </Formik>
-
-          </Body>
-        </Modal>
-      </div >
+      </Wrapper >
     );
   }
 }
 
 // MAP TO PROPS
 interface IMapStateToProps {
-  techshot: ITechShot;
+  isCreateUser: boolean;
+  signUpSuccess: boolean;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({
-  techshot: selectTechshot(state),
+  isCreateUser: selectIsCreateUser(state),
+  signUpSuccess: selectSignUpSuccess(state),
 });
 
 interface IMapDispatchToProps {
-  techshotCreate: (payload: ITechShot) => void;
-  techshotEdit: (payload: ITechShot, techshotId: string) => void;
-  techshotRequestById: (techshotId: string) => void;
+ userCreate: (payload: IUser) => void;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
-  techshotCreate: (payload: ITechShot) => dispatch(techshotCreate.started(payload)),
-  techshotEdit: (payload: ITechShot, techshotId: string) => dispatch(techshotEdit.started({ payload, techshotId })),
-  techshotRequestById: (techshotId: string) => dispatch(techshotRequestById.started({ techshotId })),
+ userCreate: (payload: IUser) => dispatch(userCreate.started(payload)),
 })
 
 
 // STYLE
-const Body = styled.div`
-	  background-color: ${props => props.theme.colors.white};
-    position: absolute;
-    width: 400px;
-    box-shadow: 5px 10px 10px #888888;
-    border-radius: 5px;
-    padding: 20px;
-    outline: 'none';
-    top: 46%;
-    left: 50%;
-    transform: translate(-46%, -50%);
+const Wrapper = styled.div`
+    width: 360px;
+    margin-right: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -188,11 +170,30 @@ const Btn: any = styled(Button)<{ oauth?: boolean }>`
   background-color: ${props => props.oauth ? '#ED1C40' : props.theme.colors.primary};
   color: ${props => props.theme.colors.white}
 }
+
+&:hover {
+  background-color: ${props => props.oauth ? '#ED1C40' : props.theme.colors.primary} !important;
+  opacity: 1;
+}
 ` as typeof Button;
 
-// const Image = styled.img`
-//   width: 80px;
-//   height: 30px;
-// `;
+const Image = styled.img`
+  width: 70px;
+  height: 25px;
+  margin-left: 6px;
+ `;
 
+const Title = styled.h1`
+    color: ${props => props.theme.colors.primary};
+    font-size: 35px;
+    margin: 2px;
+    font-family: monospace !important;
+    align-self: flex-start;
+`;
+
+const Spinner = styled(CircularProgress)`
+&&{
+	color: ${props => props.theme.colors.white};;
+}
+` as typeof CircularProgress;
 export default connect(mapStateToProps, mapDispatchToProps)(FormSignUp);

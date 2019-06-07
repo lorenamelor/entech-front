@@ -1,5 +1,30 @@
 import axios from 'axios';
-import { iSurvey, ITechShot } from '../utils/interfaces';
+import { iSurvey, ITechShot, IUser } from '../utils/interfaces';
+
+// USER
+
+export async function apiUserCreate(payload: iSurvey): Promise<{ data: { msg: any } }>  {
+	const headers: any = {};
+	return axios.post(`https://tecweb-entech.azurewebsites.net/users`, payload , { headers });
+}
+
+export async function apiUserEdit(payload: IUser, userId:string): Promise<any>  {
+	delete payload._id;
+
+	const headers: any = {};
+	return axios.put(`https://tecweb-entech.azurewebsites.net/users/${userId}`, payload , { headers });
+}
+
+export async function apiUserDelete(userId:string): Promise<any>  {
+	const headers: any = {};
+	return axios.delete(`https://tecweb-entech.azurewebsites.net/users/${userId}`, { headers });
+}
+
+export async function apiUserRequest(userId:string): Promise<IUser>  {
+	const headers: any = {};
+	const response = await axios.get(`https://tecweb-entech.azurewebsites.net/users/${userId}`, { headers });
+	return response.data;
+}
 
 // SURVEY
 

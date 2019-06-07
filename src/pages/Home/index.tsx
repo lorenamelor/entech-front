@@ -16,12 +16,14 @@ import {
 	surveyActionDone,
 	selectIsRequestSurvey
 } from '../../store/survey';
+import { userActionDone } from '../../store/user';
 
 class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
 
 	public state = { openModalSurvey: false };
 
 	public componentDidMount() {
+		this.props.userActionDone();
 		this.props.surveyRequest();
 	}
 
@@ -64,7 +66,7 @@ class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
 						</Text>
 					<Group>
 						{isRequestSurvey
-							? <CircularProgress /> 
+							? <SpinnerContent><Spinner size={30}/></SpinnerContent>
 							: map(surveys, (survey) => (
 								<CardSurvey key={survey._id} survey={survey} />
 						))}
@@ -91,19 +93,16 @@ const mapStateToProps = (state: IRootState): IMapStateToProps => ({
 interface IMapDispatchToProps {
 	surveyRequest: () => void;
 	surveyActionDone: () => void;
+	userActionDone: () => void;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
 	surveyRequest: () => dispatch(surveyRequest.started({})),
 	surveyActionDone: () => dispatch(surveyActionDone()),
+	userActionDone: () => dispatch(userActionDone()),
 })
 
 // STYLE
-const Group = styled.div`
-  display: flex;
-	flex-wrap: wrap;
-`;
-
 const Wrapper = styled.div`
   margin: 20px;
 `;
@@ -112,6 +111,11 @@ const Header = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+`;
+
+const Group = styled.div`
+  display: flex;
+	flex-wrap: wrap;
 `;
 
 const ButtomAction = styled(Button)`
@@ -128,4 +132,16 @@ const ButtomAction = styled(Button)`
 }
 ` as typeof Button;
 
+const Spinner = styled(CircularProgress)`
+&&{
+	color: ${props => props.theme.colors.primary};;
+}
+` as typeof CircularProgress;
+
+const SpinnerContent = styled.div`
+  display: flex;
+	flex:1;
+	justify-content: center;
+	margin-top: 50px;
+`;
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

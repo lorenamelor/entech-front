@@ -9,7 +9,7 @@ import theme from '../utils/theme';
 
 import { surveyCreate, surveyEdit, surveyDelete } from './survey';
 import { techshotCreate, techshotEdit, techshotDelete } from './techShot';
-
+import { userCreate } from './user';
 
 const actionCreator = actionCreatorFactory('APP::NOTIFICATION');
 export const showToast = actionCreator('SHOW_TOAST');
@@ -19,6 +19,19 @@ const toatSuccess = (msg: any) => toast.success(msg, {
     background: theme.colors.primary,
   })
 })
+
+// USER
+const userCreateSuccessEpic: Epic = (action$: any) => action$.pipe(
+  filter(userCreate.done.match),
+  tap(() => toatSuccess("Usuário Cadastrado!")),
+  mapTo(showToast())
+)
+
+const userCreateErrorEpic: Epic = (action$: any) => action$.pipe(
+  filter(userCreate.done.match),
+  tap(() => toast.error("Usuário já cadastrado")),
+  mapTo(showToast())
+)
 
 //  SURVEYS
 const surveyCreateSuccessEpic: Epic = (action$: any) => action$.pipe(
@@ -40,7 +53,6 @@ const surveyDeleteSuccessEpic: Epic = (action$: any) => action$.pipe(
 )
 
 // TECHSHOTS
-
 const techshotCreateSuccessEpic: Epic = (action$: any) => action$.pipe(
   filter(techshotCreate.done.match),
   tap(() => toatSuccess("Techshot Criada!")),
@@ -60,6 +72,9 @@ const techshotDeleteSuccessEpic: Epic = (action$: any) => action$.pipe(
 )
 
 export const epics = combineEpics(
+  userCreateSuccessEpic,
+  userCreateErrorEpic,
+
   surveyCreateSuccessEpic,
   surveyEditSuccessEpic,
   surveyDeleteSuccessEpic,

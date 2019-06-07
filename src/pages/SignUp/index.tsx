@@ -1,25 +1,32 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { FormSignUp } from '../../components';
-
+// tslint:disable-next-line:no-var-requires
+const background = require('../../assets/imgs/background2.png');
 
 
 class SignUp extends React.PureComponent {
 
 	public render() {
 		return (
-			<>
-				<Background/>
+			<Wrapper>
 				<FormSignUp />
-			</>
+				<Img src={background}/>
+			</Wrapper>
 		);
 	}
 }
 
-const Background = styled.div`
-	background-color: ${props => props.theme.colors.primary};
+const Wrapper = styled.div`
+	display: flex;
+	justify-content: flex-end;
 	height: 100vh;
-	width: 50%;
 `;
 
+const Img = styled.img`
+	width: 61%;
+	display: flex;
+	height: 93%;
+	margin: 20px;
+`;
 export default SignUp;
