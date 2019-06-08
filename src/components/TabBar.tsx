@@ -9,7 +9,6 @@ import { Text, ModalCreateAdmUser } from '../components';
 import { Link } from 'react-router-dom';
 import theme from '../utils/theme';
 
-
 class ExampleComponent extends React.PureComponent {
 
 	public state = { openModalSurvey: false };
@@ -26,7 +25,7 @@ class ExampleComponent extends React.PureComponent {
 					<Text size={30}>Logo</Text>
 					
 					<Menu>
-						<Link to="/">
+						<Link to="/home">
 							<HomeIcon style={{color: theme.colors.gray60}} />
 						</Link>
 						<Separator />
@@ -45,14 +44,17 @@ class ExampleComponent extends React.PureComponent {
 
 
 // STYLE
-
 const TabBar = styled(Toolbar)`
 &&{
 	background-color: ${props => props.theme.colors.white};
 	display: flex;
 	justify-content: space-between;
 	flex-direction: flex-start;
-	height: 60px;
+	min-height: 60px;
+
+	@media (max-width: 490px){
+    flex-direction: column;
+  }
 }
 ` as typeof Toolbar;
 

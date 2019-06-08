@@ -17,9 +17,14 @@ import TimerIcon from '@material-ui/icons/Timer';
 import PersonIcon from '@material-ui/icons/Person';
 import { ITechShot } from '../utils/interfaces';
 import { techshotDelete } from '../store/techShot';
+import { 
+  Edit as EditIcon,
+  Close as DeleteIcon, 
+ } from '@material-ui/icons';
+
 
 interface IProps {
-  techshot: ITechShot;    
+  techshot: ITechShot;
   expanded: string,
   handleChangePanel: (id: string) => () => void;
 }
@@ -61,14 +66,14 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps & IProps> {
             <SummaryInfo>
               <Header>
                 <Text bold size={15}> {title} </Text>
-                <Container>
+                <ContainerButtons>
                   <BtnAction color={theme.colors.orange} onClick={this.handleModalEdit}>
-                    Editar
-              </BtnAction>
+                    <EditIcon style={{ fontSize: '15px' }} />
+                  </BtnAction>
                   <BtnAction color={theme.colors.red} onClick={this.handleModalDelete}>
-                    Excluir
-              </BtnAction>
-                </Container>
+                    <DeleteIcon style={{ fontSize: '15px' }} />
+                  </BtnAction>
+                </ContainerButtons>
               </Header>
 
               <InfoContainer>
@@ -101,8 +106,8 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps & IProps> {
         <Details>
           <Text bold>Sobre:</Text>
           <Text>
-           {description}
-        </Text>
+            {description}
+          </Text>
         </Details>
         <Details>
           <Text bold>Palavras Chaves:</Text>
@@ -111,17 +116,17 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps & IProps> {
           </ContainerChips>
         </Details>
 
-        { openModalEdit && <ModalCreateTechShot 
-          open={openModalEdit} 
-          handleClose={this.handleModalEdit} 
+        {openModalEdit && <ModalCreateTechShot
+          open={openModalEdit}
+          handleClose={this.handleModalEdit}
           techshotId={_id}
-          surveyId={surveyId!}/>
+          surveyId={surveyId!} />
         }
-        { openModalDelete && <ModalConfirmation 
+        {openModalDelete && <ModalConfirmation
           text={`Deseja mesmo apagar a techshot "${title}" ?`}
-          open={openModalDelete} 
-          handleClose={this.handleModalDelete} 
-          action={this.handleTechshotDelete(_id!)}/>
+          open={openModalDelete}
+          handleClose={this.handleModalDelete}
+          action={this.handleTechshotDelete(_id!)} />
         }
 
       </CardWrapper>
@@ -148,21 +153,35 @@ const CardWrapper = styled(ExpansionPanel)`
   border-left: 15px solid ${props => props.theme.colors.primary};
   padding: 0 5px;
   border-radius: 5px;
+  display: 'flex';
+  flex-wrap: wrap;
+  
+  @media (max-width: 650px){
+    .MuiExpansionPanelSummary-content-96{
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
 }
 ` as typeof ExpansionPanel;
 
 const SummaryInfo = styled.div`
   display: flex;
+  flex-wrap: wrap;
   width: 100%;
-  flex: 1;
   flex-direction: column;
   justify-content: flex-start;
+  margin: 18px 18px 18px 0px;
 `;
 
 const Summary = styled.div`
   display: flex;
+  align-items: center;
   width: 100%;
-  flex: 1;
+  
+  @media (max-width: 490px){
+    flex-direction: column;
+  }
 `;
 
 const Details = styled(ExpansionPanelDetails)`
@@ -177,11 +196,26 @@ const Header = styled.div`
   display: flex;
   width: 100%;
   margin-top: 3px;
+  align-content: center;
 `;
 
-const Container = styled.div`
+const Container = styled.div<{buttons?: boolean}>`
   display: flex;
   align-items: center;
+
+  @media (max-width: 650px){
+    width: 100%;
+    margin-top: 15px;
+  }
+`;
+
+const ContainerButtons = styled.div<{buttons?: boolean}>`
+  display: flex;
+  align-items: center;
+  position: absolute;
+  float: right;
+  right: 6px;
+  top: 6px;
 `;
 
 const Photo: any = styled(Avatar)`
@@ -197,6 +231,10 @@ const Votes = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 650px){
+    flex-direction: row;
+  }
 `;
 
 const Separator = styled.hr`
@@ -209,15 +247,14 @@ const Separator = styled.hr`
 
 const BtnAction: any = styled(Button)`
 &&{
-  background-color: ${props => props.color};
-  color: ${props => props.theme.colors.white};
+	background-color: ${props => props.color};
+	color: ${props => props.theme.colors.white};
   text-transform: none;
-  font-size: 12px;
-  margin: 0px 4px;
-  height: 20px;
+  margin: 4px 2px;
+  padding: 4px;
   border-radius: 35px;
-  align-items: center;
-  padding: 0px 10px;
+  min-width: unset;
+  max-height: 23px;
 }
 ` as typeof Button;
 
@@ -228,6 +265,7 @@ const Info = styled.div`
 
 const InfoContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
   margin-top: 10px;
   flex: 1;
   width: 100%;
@@ -244,6 +282,10 @@ const BtnVote: any = styled(Button)`
   border-radius: 35px;
   align-items: center;
   padding: 0px 10px;
+
+  @media (max-width: 650px){
+    width: 100%;
+  }
 }
 ` as typeof Button;
 

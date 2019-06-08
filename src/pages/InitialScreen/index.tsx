@@ -58,12 +58,35 @@ const FormContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+
+  @media (max-width: 860px){
+    width: 60%;
+		margin: 20px;
+  }
+
+  @media (min-width: 860px) and (max-width: 1100px){
+		position: absolute;
+    align-self: flex-start;
+    margin: 40px 0px 0px 0px;
+    width: 40%;
+    left: 45px;
+    flex-direction: column;
+  }
 `;
 
 const Wrapper = styled.div`
 	display: flex;
 	justify-content: flex-end;
 	height: 100vh;
+
+	@media (max-width: 1100px){
+		align-items: flex-end;
+  }
+
+	@media (max-width: 860px){
+		align-items: center;
+		justify-content: center;
+  }
 `;
 
 const Img = styled.img`
@@ -71,6 +94,21 @@ const Img = styled.img`
 	display: flex;
 	height: 93%;
 	margin: 20px;
+
+	@media (max-width: 850px){
+		display: none;
+	 }
+
+	@media (max-width: 960px){
+		height: 70%;
+		width: 55%;
+    margin: 0px 20px 0px 0px;
+  }
+
+	@media (max-width: 1100px){
+		height: 76%;
+    margin: 0px 20px 0px 0px;
+  }
 `;
 
 const Container = styled.div`

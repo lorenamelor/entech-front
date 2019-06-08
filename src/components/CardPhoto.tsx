@@ -30,8 +30,7 @@ function CardPhoto() {
 
 const CardWrapper = styled(Card)`
 &&{
-  width: 220px;
-  margin: 20px;
+  margin: 10px;
 }
 ` as typeof Card;
 

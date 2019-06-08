@@ -32,9 +32,7 @@ class Survey extends React.PureComponent<IMapDispatchToProps & IMapStateToProps 
 	public state = { openModalTechshot: false, expanded: '',};
 
 	public componentDidMount() {
-		const { match: { params: { surveyId } }, match } = this.props;
-		console.log('match', match)
-
+		const { match: { params: { surveyId } } } = this.props;
 		this.props.surveyRequestById(surveyId);
 		this.props.techshotRequest(surveyId);
 	}
@@ -65,15 +63,9 @@ class Survey extends React.PureComponent<IMapDispatchToProps & IMapStateToProps 
 			<>
 				<TabBar />
 				<Wrapper>
-					<Header>
-						<Text bold size={24}>
-							{title}
-						</Text>
-
-						<ButtomAction onClick={this.handleModalTechShot}>
-							<AddIcon fontSize='small' /> Adicionar TechShot
-						</ButtomAction>
-					</Header>
+					<Text bold size={24}>
+						{title}
+					</Text>
 
 					<InfoContainer>
 						<Info>
@@ -92,12 +84,20 @@ class Survey extends React.PureComponent<IMapDispatchToProps & IMapStateToProps 
 							<Text> {formatDate(surveyEndDate)} </Text>
 						</Info>
 					</InfoContainer>
+
+					<ButtonCotainer>
+						<ButtomAction onClick={this.handleModalTechShot}>
+							<AddIcon fontSize='small' /> Adicionar TechShot
+						</ButtomAction>
+					</ButtonCotainer>
+
 					{map(techshots, techshot => <CardTechShot 
-					expanded={expanded} 
-					key={techshot._id} 
-					techshot={techshot} 
-					handleChangePanel={this.handleChangePanel}
+						expanded={expanded} 
+						key={techshot._id} 
+						techshot={techshot} 
+						handleChangePanel={this.handleChangePanel}
 					/>)}
+
 					<ModalCreateTechShot 
 						open={openModalTechshot} 
 						handleClose={this.handleModalTechShot} 
@@ -136,22 +136,23 @@ const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
 // STYLE
 const Info = styled.div`
   display: flex;
-	margin-right: 30px;
+	margin: 14px 30px 0px 0px;
 `;
 
 const InfoContainer = styled.div`
 	display: flex;
 	margin: 20px 0px 30px;
+	flex-wrap: wrap;
 `;
 
 const Wrapper = styled.div`
   margin: 20px;
 `;
 
-const Header = styled.div`
+const ButtonCotainer = styled.div`
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
+	width: 100%;
+	justify-content: flex-end;
 `;
 
 const ButtomAction = styled(Button)`
@@ -160,7 +161,7 @@ const ButtomAction = styled(Button)`
 	color: ${props => props.theme.colors.white};
 	text-transform: none;
 	font-size: 15px;
-	margin: 0px 20px;
+	margin: 0px 20px 20px 0px;
   height: 31px;
 	border-radius: 35px;
   align-items: center;

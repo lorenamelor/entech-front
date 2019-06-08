@@ -6,6 +6,7 @@ import map from 'lodash/map';
 import { IRootState } from '../../store';
 import { iSurvey } from '../../utils/interfaces';
 
+import AliceCarousel from 'react-alice-carousel';
 import { TabBar, CardPhoto, CardSurvey, Text, ModalCreateSurvey } from '../../components';
 import { Button, CircularProgress } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
@@ -42,35 +43,63 @@ class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
 		const { surveys, isRequestSurvey } = this.props;
 		const { openModalSurvey } = this.state;
 
+		const responsive = {
+			0: { items: 1 },
+			500: { items: 2 },
+			750: { items: 3 },
+			960: { items: 4 },
+			1300: { items: 5 },
+			1600: { items: 6 },
+			1900: { items: 7 },
+			2400: { items: 8 },
+		}
+
 		return (
 			<>
 				<TabBar />
 				<Wrapper>
 					
-					<Header>
-						<Text bold size={24}>
+					<Text bold size={24}>
 							Eventos
 					</Text>
+
+					<AliceCarousel 
+						mouseDragEnabled 
+						responsive = {responsive}
+						stagePadding = {{
+							paddingLeft: 10,
+							paddingRight: 10,
+						}}
+
+						buttonsDisabled={true}
+					>
+						<CardPhoto />
+						<CardPhoto />
+						<CardPhoto />
+						<CardPhoto />
+						<CardPhoto />
+						<CardPhoto />
+						<CardPhoto />
+						<CardPhoto />
+						<CardPhoto />
+						<CardPhoto />
+					</AliceCarousel>
+
+					<Header>
+						<Text bold size={24}>
+							Enquetes
+						</Text>
 						<ButtomAction onClick={this.handleModalSurvey}>
 							<AddIcon fontSize='small' /> Adicionar Enquete
 						</ButtomAction>
 					</Header>
-
-					<Group>
-						<CardPhoto />
-						<CardPhoto />
-					</Group>
-
-					<Text bold size={24}>
-						Enquetes
-						</Text>
-					<Group>
+					<GroupSurvey>
 						{isRequestSurvey
 							? <SpinnerContent><Spinner size={30}/></SpinnerContent>
 							: map(surveys, (survey) => (
 								<CardSurvey key={survey._id} survey={survey} />
 						))}
-					</Group>
+					</GroupSurvey>
 				</Wrapper>
 				<ModalCreateSurvey open={openModalSurvey} handleClose={this.handleModalSurvey} />
 			</>
@@ -113,9 +142,10 @@ const Header = styled.div`
 	align-items: center;
 `;
 
-const Group = styled.div`
+const GroupSurvey = styled.div`
   display: flex;
 	flex-wrap: wrap;
+	justify-content: space-between;
 `;
 
 const ButtomAction = styled(Button)`
@@ -124,7 +154,6 @@ const ButtomAction = styled(Button)`
 	color: ${props => props.theme.colors.white};
 	text-transform: none;
 	font-size: 15px;
-	margin: 0px 20px;
   height: 31px;
 	border-radius: 35px;
   align-items: center;

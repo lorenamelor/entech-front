@@ -9,6 +9,11 @@ import { Dispatch } from 'redux';
 import { surveyDelete } from '../store/survey';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { 
+   Edit as EditIcon,
+   Close as DeleteIcon, 
+   RemoveRedEye as EyeIcon 
+  } from '@material-ui/icons';
 
 interface IProps {
   survey: iSurvey,
@@ -40,37 +45,38 @@ class CardSurvey extends React.PureComponent<IProps & IMapDispatchToProps> {
     return (
       <CardWrapper>
           <Header>
-            <Text bold size={15}>
+            <Text bold wight size={15}>
               {title}
             </Text>
             <ContainerBtn>
               <LinkAction color={theme.colors.primary} to={`/enquete/${_id}`}>
-                Ver
+                <EyeIcon style={{ fontSize:'15px' }}/>
               </LinkAction>
               <BtnAction color={theme.colors.orange} onClick={this.handleModalEdit}>
-                Editar
+                <EditIcon style={{ fontSize:'15px' }}/>
               </BtnAction>
               <BtnAction color={theme.colors.red} onClick={this.handleModalDelete}>
-                Excluir
+                <DeleteIcon style={{ fontSize:'15px' }}/>
               </BtnAction>
             </ContainerBtn>
           </Header>
 
           <Info>
-            <Text bold>
-              Data limite para votação: 
-            </Text>
-            <Text>
-              {formatDate(date)}
-            </Text>
-            <div style={{marginLeft: '10px', display: 'flex'}}>
+            <Container>
               <Text bold>
-                Data do evento: 
+                Data limite para votação: 
               </Text>
               <Text>
-                {formatDate(surveyEndDate)}
+                {formatDate(date)}
               </Text>
-            </div>
+            </Container>
+
+            <Text bold>
+              Data do evento: 
+            </Text>
+            <Text>
+              {formatDate(surveyEndDate)}
+            </Text>
           </Info>
 
         { openModalEdit && <ModalCreateSurvey 
@@ -103,9 +109,8 @@ const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
 // STYLE
 const CardWrapper = styled(Paper)`
 &&{
-	height: 70px;
-  width: 46%;
-  margin: 10px;
+  width: 47%;
+  margin: 10px 0px;
   display: flex;
   background-color: ${props => props.theme.colors.white};
 	flex-direction: column;
@@ -114,6 +119,11 @@ const CardWrapper = styled(Paper)`
   border-left: 15px solid ${props => props.theme.colors.primary};
   padding: 0 5px;
   border-radius: 5px;
+  flex-wrap: wrap;
+  
+  @media (max-width: 960px){
+    width: 100%;
+  }
 }
 ` as typeof Paper;
 
@@ -121,7 +131,8 @@ const CardWrapper = styled(Paper)`
 const Info = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  flex-wrap: wrap;
+  margin: 10px 0px;
 `;
 
 const Header = styled.div`
@@ -134,19 +145,19 @@ const Header = styled.div`
 
 const ContainerBtn = styled.div`
   display: flex;
+  margin-left: 10px;
 `;
 
 const BtnAction: any = styled(Button)`
 &&{
 	background-color: ${props => props.color};
 	color: ${props => props.theme.colors.white};
-	text-transform: none;
-	font-size: 12px;
-	margin: 4px;
-  height: 20px;
-	border-radius: 35px;
-  align-items: center;
-  padding: 0px 10px;
+  text-transform: none;
+  margin: 4px 2px;
+  padding: 4px;
+  border-radius: 35px;
+  min-width: unset;
+  max-height: 23px;
 }
 ` as typeof Button;
 
@@ -154,18 +165,20 @@ const LinkAction: any = styled(Link)`
 &&{
 	background-color: ${props => props.color};
 	color: ${props => props.theme.colors.white};
-	text-transform: none;
-  text-decoration: none;
-	font-size: 12px;
-	margin: 4px;
-  height: 20px;
-	border-radius: 35px;
+  text-transform: none;
+  margin: 4px 2px;
+  padding: 4px;
+  border-radius: 35px;
+  min-width: unset;
   display: flex;
-  align-items: center;
-  padding: 0px 10px;
-  width: 45px;
   justify-content: center;
-}
-`;
+  align-items: center;
+  max-height: 15px;
+}`;
 
+const Container = styled.div`
+  margin-right: 10px;
+  display: flex;
+  flex-wrap: wrap;
+`;
 export default connect(null, mapDispatchToProps)(CardSurvey);
