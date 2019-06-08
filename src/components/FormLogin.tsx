@@ -78,7 +78,7 @@ class FormLogin extends React.PureComponent<IMapDispatchToProps & IMapStateToPro
                   width="99%"
                 />
                 <Btn type="submit" color={colors.primary}>
-                  {isCreateUser ? <Spinner size={20} /> : 'Salvar'}
+                  {isCreateUser ? <Spinner size={20} /> : 'Entrar'}
                 </Btn>
                 <Btn color={colors.pink}>
                   Continuar com o <Image src={require("../assets/imgs/meetup-logo.png")} />

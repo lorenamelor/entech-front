@@ -131,7 +131,7 @@ class FormSignUp extends React.PureComponent<IProps & IMapDispatchToProps & IMap
                   :
                   <>
                     <Btn type="submit" color={colors.primary}>
-                      {isCreateUser ? <Spinner size={20} /> : 'Salvar'}
+                      {isCreateUser ? <Spinner size={20} /> : 'Cadastrar'}
                     </Btn>
                     <Btn color={colors.pink}>
                       Continuar com o <Image src={require("../assets/imgs/meetup-logo.png")} />
