@@ -32,7 +32,9 @@ class Survey extends React.PureComponent<IMapDispatchToProps & IMapStateToProps 
 	public state = { openModalTechshot: false, expanded: '',};
 
 	public componentDidMount() {
-		const { match: { params: { surveyId } } } = this.props;
+		const { match: { params: { surveyId } }, match } = this.props;
+		console.log('match', match)
+
 		this.props.surveyRequestById(surveyId);
 		this.props.techshotRequest(surveyId);
 	}

@@ -26,6 +26,12 @@ export async function apiUserRequest(userId:string): Promise<IUser>  {
 	return response.data;
 }
 
+export async function apiUserSignin(payload: {email: string, password: string}): Promise<any>  {
+	// const headers: any = {};
+	// return axios.post(`https://tecweb-entech.azurewebsites.net/users`, payload , { headers });
+	return payload
+}
+
 // SURVEY
 
 export async function apiSurveyCreate(payload: iSurvey): Promise<{ data: { msg: any } }>  {

@@ -1,9 +1,9 @@
 import Home from './Home';
 import Survey from './Survey';
-import SignUp from './SignUp';
+import InitialScreen from './InitialScreen';
 
 export {
 	Home,
 	Survey,
-	SignUp,
+	InitialScreen,
 };

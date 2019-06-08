@@ -44,7 +44,7 @@ class CardSurvey extends React.PureComponent<IProps & IMapDispatchToProps> {
               {title}
             </Text>
             <ContainerBtn>
-              <LinkAction color={theme.colors.primary} to={`/survey/${_id}`}>
+              <LinkAction color={theme.colors.primary} to={`/enquete/${_id}`}>
                 Ver
               </LinkAction>
               <BtnAction color={theme.colors.orange} onClick={this.handleModalEdit}>

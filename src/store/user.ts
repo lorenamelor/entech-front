@@ -9,6 +9,7 @@ import {
 	apiUserRequest,
 	apiUserEdit,
 	apiUserDelete,
+	apiUserSignin,
 } from '../services/api';
 
 import { IUser } from '../utils/interfaces';
@@ -28,6 +29,7 @@ export const userEdit = actionCreator.async<any, any, any>('EDIT');
 export const userDelete = actionCreator.async<any, any, any>('DELETE');
 export const userRequest = actionCreator.async<any, any, any>('REQUEST');
 export const userActionDone = actionCreator('USER_ACTION_DONE');
+export const userSignin = actionCreator.async<any, any, any>('SIGNIN');
 
 
 // STATE
@@ -56,7 +58,7 @@ const INITIAL_STATE: IState = {
 
 // REDUCER
 export default reducerWithInitialState(INITIAL_STATE)
-	.case(userCreate.started, (state: IState) => ({
+	.cases([userCreate.started, userSignin.started], (state: IState) => ({
 		...state,
 		isCreateUser: !state.isCreateUser,
 	}))
@@ -65,7 +67,7 @@ export default reducerWithInitialState(INITIAL_STATE)
 		isCreateUser: !state.isCreateUser,
 		signUpSuccess: true,
 	}))
-	.case(userCreate.failed, (state: IState) => ({
+	.cases([userCreate.failed, userSignin.done, userSignin.failed], (state: IState) => ({
 		...state,
 		isCreateUser: !state.isCreateUser,
 	}))
@@ -82,11 +84,10 @@ export default reducerWithInitialState(INITIAL_STATE)
 		users,
 		isRequestuser: false,
 	}))
-	.cases([userEdit.done, userActionDone], (state: IState) => ({
+	.cases([userEdit.done, userSignin.done, userActionDone,], (state: IState) => ({
 		...state,
 		userAction: !state.userAction,
 		signUpSuccess: false,
-
 	}))
 	.build();
 
@@ -124,9 +125,18 @@ const userRequestEpic: Epic = (action$) => action$.pipe(
 		)),
 	));
 
+	const userSigninEpic: Epic = (action$) => action$.pipe(
+		filter((userSignin.started).match),
+		mergeMap(({ payload }) => from(apiUserSignin(payload)).pipe(
+			map(({ data }) => userSignin.done({ params: { ...payload }, result: { data } })),
+			catchError((error) => of(userSignin.failed({ params: { ...payload }, error }))),
+		)),
+	);
+
 export const epics = combineEpics(
 	userCreateEpic,
 	userEditEpic,
 	userDeleteEpic,
 	userRequestEpic,
+	userSigninEpic,
 );
