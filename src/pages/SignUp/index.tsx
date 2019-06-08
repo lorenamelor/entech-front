@@ -10,12 +10,19 @@ class SignUp extends React.PureComponent {
 	public render() {
 		return (
 			<Wrapper>
-				<FormSignUp />
+				<FormContainer>
+					<FormSignUp />
+				</FormContainer>
 				<Img src={background}/>
 			</Wrapper>
 		);
 	}
 }
+
+const FormContainer = styled.div`
+	margin: 45px;
+	display: flex;
+`;
 
 const Wrapper = styled.div`
 	display: flex;
@@ -24,7 +31,7 @@ const Wrapper = styled.div`
 `;
 
 const Img = styled.img`
-	width: 61%;
+	width: 60%;
 	display: flex;
 	height: 93%;
 	margin: 20px;

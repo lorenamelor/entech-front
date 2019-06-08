@@ -28,7 +28,7 @@ const userCreateSuccessEpic: Epic = (action$: any) => action$.pipe(
 )
 
 const userCreateErrorEpic: Epic = (action$: any) => action$.pipe(
-  filter(userCreate.done.match),
+  filter(userCreate.failed.match),
   tap(() => toast.error("Usuário já cadastrado")),
   mapTo(showToast())
 )

@@ -65,7 +65,6 @@ class ModalCreateSurvey extends React.PureComponent<IProps & IMapDispatchToProps
         >
           <Body>
             <Text size={22}>Cadastrar Enquete</Text>
-
             <Formik
               initialValues={surveyId && survey._id === surveyId ? survey : initialValues}
               enableReinitialize
@@ -237,8 +236,10 @@ class ModalCreateSurvey extends React.PureComponent<IProps & IMapDispatchToProps
                       width="47%"
                     />
 
-                    <Btn type="submit">Salvar</Btn>
-                    {/* <Btn onClick={}>Salvar</Btn> */}
+                    <ContainerButton>
+                      <Btn onClick={handleClose} cancel>Cancelar</Btn>
+                      <Btn type="submit">Salvar</Btn>
+                    </ContainerButton>
                   </Form>
                 )
               }}
@@ -298,16 +299,20 @@ const Input: any = styled(TextField)<{ width: string }>`
   margin: 5px;
   width: ${props => props.width};
 }
-` as typeof TextField;
+`;
 
-const Btn = styled(Button)`
+const ContainerButton = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Btn: any = styled(Button)<{ cancel: boolean }>`
 &&{
   margin-top: 20px;
-  width: 100%;
-  background-color: ${props => props.theme.colors.primary};
+  width: 48%;
+  background-color: ${props => props.cancel ? props.theme.colors.gray40 : props.theme.colors.primary};
   color: ${props => props.theme.colors.white}
-}
-` as typeof Button;
+}`;
 
 // const BtnUpload: any = styled(Button)`
 // &&{

@@ -56,19 +56,19 @@ const INITIAL_STATE: IState = {
 
 // REDUCER
 export default reducerWithInitialState(INITIAL_STATE)
-.case(userCreate.started, (state: IState) => ({
-	...state,
-	isCreateUser: !state.isCreateUser,
-}))
-.case(userCreate.done, (state: IState) => ({
-	...state,
-	isCreateUser: !state.isCreateUser,
-	signUpSuccess: true,
-}))
-.case(userCreate.failed, (state: IState) => ({
-	...state,
-	isCreateUser: !state.isCreateUser,
-}))
+	.case(userCreate.started, (state: IState) => ({
+		...state,
+		isCreateUser: !state.isCreateUser,
+	}))
+	.case(userCreate.done, (state: IState) => ({
+		...state,
+		isCreateUser: !state.isCreateUser,
+		signUpSuccess: true,
+	}))
+	.case(userCreate.failed, (state: IState) => ({
+		...state,
+		isCreateUser: !state.isCreateUser,
+	}))
 	.case(userRequest.started, (state: IState) => ({
 		...state,
 		isRequestuser: true,

@@ -36,7 +36,7 @@ const initialValues = {
   duration: 0,
   description: '',
   photoURL: '',
-  speaker:'',
+  speaker: '',
   keywords: [],
 }
 
@@ -45,7 +45,7 @@ class ModalCreateTeachShot extends React.PureComponent<IProps & IMapDispatchToPr
   public componentDidMount() {
     const { techshotId } = this.props;
 
-    if(techshotId){
+    if (techshotId) {
       this.props.techshotRequestById(techshotId);
     }
   }
@@ -184,8 +184,10 @@ class ModalCreateTeachShot extends React.PureComponent<IProps & IMapDispatchToPr
                       width="100%"
                     />
 
-                    <Btn type="submit">Salvar</Btn>
-                    {/* <Btn onClick={}>Cancela</Btn> */}
+                    <ContainerButton>
+                      <Btn onClick={handleClose} cancel>Cancelar</Btn>
+                      <Btn type="submit">Salvar</Btn>
+                    </ContainerButton>
                   </Form>
                 )
               }}
@@ -253,14 +255,18 @@ const InputChip: any = styled(ChipInput)<{ width: string }>`
 }
 ` as typeof ChipInput;
 
-const Btn = styled(Button)`
+const ContainerButton = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Btn: any = styled(Button)<{ cancel: boolean }>`
 &&{
   margin-top: 20px;
-  width: 100%;
-  background-color: ${props => props.theme.colors.primary};
+  width: 48%;
+  background-color: ${props => props.cancel ? props.theme.colors.gray40 : props.theme.colors.primary};
   color: ${props => props.theme.colors.white}
-}
-` as typeof Button;
+}`;
 
 const BtnUpload: any = styled(Button)`
 &&{

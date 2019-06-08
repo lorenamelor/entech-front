@@ -5,6 +5,7 @@ import Text from './utils/Text';
 import ModalCreateSurvey from './ModalCreateSurvey';
 import ModalConfirmation from './ModalConfirmation';
 import ModalCreateTechShot from './ModalCreateTechShot';
+import ModalCreateAdmUser from './ModalCreateAdmUser';
 import CardTechShot from './CardTechShot';
 import FormSignUp from './FormSignUp';
 
@@ -16,6 +17,7 @@ export {
 	ModalCreateSurvey,
 	ModalConfirmation,
 	ModalCreateTechShot,
+	ModalCreateAdmUser,
 	CardTechShot,
 	FormSignUp,
 };
