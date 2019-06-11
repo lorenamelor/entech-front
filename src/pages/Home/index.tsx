@@ -2,10 +2,10 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
 import map from 'lodash/map';
 import { IRootState } from '../../store';
 import { iSurvey } from '../../utils/interfaces';
-
 import AliceCarousel from 'react-alice-carousel';
 import { TabBar, CardPhoto, CardSurvey, Text, ModalCreateSurvey } from '../../components';
 import { Button, CircularProgress } from '@material-ui/core';
@@ -17,15 +17,22 @@ import {
 	surveyActionDone,
 	selectIsRequestSurvey
 } from '../../store/survey';
-import { userActionDone } from '../../store/user';
+import { userActionDone, userSigninClearState, selectSignIn } from '../../store/user';
+import { eventRequest, selectEvents } from '../../store/event';
 
 class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
 
 	public state = { openModalSurvey: false };
 
 	public componentDidMount() {
-		this.props.userActionDone();
+		if(this.props.surveyAction){
+			this.props.userActionDone();
+		}
+		if(this.props.signin){
+			this.props.userSigninClearState();
+		}
 		this.props.surveyRequest();
+		this.props.eventRequest();
 	}
 
 	public componentDidUpdate() {
@@ -40,7 +47,7 @@ class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
 	}
 
 	public render() {
-		const { surveys, isRequestSurvey } = this.props;
+		const { surveys, isRequestSurvey, events } = this.props;
 		const { openModalSurvey } = this.state;
 
 		const responsive = {
@@ -54,6 +61,7 @@ class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
 			2400: { items: 8 },
 		}
 
+		if (!sessionStorage.getItem('userData')) { return <Redirect to="/" /> }
 		return (
 			<>
 				<TabBar />
@@ -73,16 +81,7 @@ class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
 
 						buttonsDisabled={true}
 					>
-						<CardPhoto />
-						<CardPhoto />
-						<CardPhoto />
-						<CardPhoto />
-						<CardPhoto />
-						<CardPhoto />
-						<CardPhoto />
-						<CardPhoto />
-						<CardPhoto />
-						<CardPhoto />
+					{map(events, (event: any) => <CardPhoto item={event} type='event' redirect={`/evento/${event._id}`}/> )}
 					</AliceCarousel>
 
 					<Header>
@@ -112,23 +111,31 @@ interface IMapStateToProps {
 	surveys: iSurvey[];
 	surveyAction: boolean;
 	isRequestSurvey: boolean;
+	signin: boolean;
+	events: [];
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({
 	surveys: selectSurveys(state),
 	surveyAction: selectSurveyAction(state),
 	isRequestSurvey: selectIsRequestSurvey(state),
+	signin: selectSignIn(state),
+	events: selectEvents(state)
 });
 interface IMapDispatchToProps {
 	surveyRequest: () => void;
 	surveyActionDone: () => void;
 	userActionDone: () => void;
+	userSigninClearState: () => void;
+	eventRequest: () => void;	
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
 	surveyRequest: () => dispatch(surveyRequest.started({})),
 	surveyActionDone: () => dispatch(surveyActionDone()),
 	userActionDone: () => dispatch(userActionDone()),
+	userSigninClearState: () => dispatch(userSigninClearState()),
+	eventRequest: () => dispatch(eventRequest.started({}))
 })
 
 // STYLE

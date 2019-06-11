@@ -1,26 +1,27 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Button } from '@material-ui/core';
-import { Text, ModalCreateTechShot, ModalConfirmation } from '../components';
-
-import theme from '../utils/theme';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import map from 'lodash/map';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Avatar from '@material-ui/core/Avatar';
-import Chip from '@material-ui/core/Chip';
-import TimerIcon from '@material-ui/icons/Timer';
-import PersonIcon from '@material-ui/icons/Person';
-import { ITechShot } from '../utils/interfaces';
-import { techshotDelete } from '../store/techShot';
+import theme from '../utils/theme';
+import { ITechShot, IPoll } from '../utils/interfaces';
+import { techshotDelete, techshotPoll } from '../store/techShot';
+import { Text, ModalCreateTechShot, ModalConfirmation } from '../components';
+import { 
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  ExpansionPanelDetails,
+  Avatar,
+  Chip,
+  Button} from '@material-ui/core';
+import {
+  ExpandMore as ExpandMoreIcon,
+  Timer as TimerIcon,
+  Person as PersonIcon} from '@material-ui/icons';
 import { 
   Edit as EditIcon,
-  Close as DeleteIcon, 
- } from '@material-ui/icons';
+  Close as DeleteIcon } from '@material-ui/icons';
+import { getUser } from '../store/user';
 
 
 interface IProps {
@@ -49,10 +50,14 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps & IProps> {
     this.handleModalDelete();
   }
 
+  public handleTechshotpoll = (techshotId: string, userId: string) => () => {
+    this.props.techshotPoll({techshotId, userId})
+  }
+
   public render() {
     const { openModalEdit, openModalDelete } = this.state;
     const { expanded, techshot, handleChangePanel } = this.props;
-    const { _id, title, duration, keywords, speaker, description, surveyId } = techshot;
+    const { _id, title, duration, keywords, speaker, description, surveyId, userId } = techshot;
 
     return (
       <CardWrapper onChange={handleChangePanel(_id!)} expanded={expanded === _id}>
@@ -66,6 +71,8 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps & IProps> {
             <SummaryInfo>
               <Header>
                 <Text bold size={15}> {title} </Text>
+                { getUser('_id') === userId
+                  ?
                 <ContainerButtons>
                   <BtnAction color={theme.colors.orange} onClick={this.handleModalEdit}>
                     <EditIcon style={{ fontSize: '15px' }} />
@@ -74,6 +81,7 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps & IProps> {
                     <DeleteIcon style={{ fontSize: '15px' }} />
                   </BtnAction>
                 </ContainerButtons>
+                : null }
               </Header>
 
               <InfoContainer>
@@ -97,7 +105,8 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps & IProps> {
               <Text>votos</Text>
             </Votes>
             <Separator />
-            <BtnVote>
+            <BtnVote 
+              onClick={this.handleTechshotpoll(_id!,'5ce030c9d323f326247f3122')}>
               Votar
             </BtnVote>
           </Container>
@@ -137,10 +146,12 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps & IProps> {
 // MAP TO PROPS
 interface IMapDispatchToProps {
   techshotDelete: (techshotId: string) => void;
+  techshotPoll: (payload: IPoll) => void;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
   techshotDelete: (techshotId: string) => dispatch(techshotDelete.started({ techshotId })),
+  techshotPoll: (payload: IPoll) => dispatch(techshotPoll.started({ payload })),
 })
 
 
@@ -171,7 +182,7 @@ const SummaryInfo = styled.div`
   width: 100%;
   flex-direction: column;
   justify-content: flex-start;
-  margin: 18px 18px 18px 0px;
+  margin: 7px 7px 7px 0px;
 `;
 
 const Summary = styled.div`
@@ -202,6 +213,7 @@ const Header = styled.div`
 const Container = styled.div<{buttons?: boolean}>`
   display: flex;
   align-items: center;
+  padding-right: 65px;
 
   @media (max-width: 650px){
     width: 100%;

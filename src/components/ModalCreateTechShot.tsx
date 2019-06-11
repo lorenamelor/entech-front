@@ -13,6 +13,7 @@ import { Text } from '../components';
 
 import { ITechShot } from '../utils/interfaces';
 import { techshotCreate, techshotEdit, selectTechshot, techshotRequestById } from '../store/techShot';
+import { getUser } from '../store/user';
 
 
 interface IProps {
@@ -72,7 +73,7 @@ class ModalCreateTeachShot extends React.PureComponent<IProps & IMapDispatchToPr
 
                 const payload = {
                   ...values,
-                  userId: "5ce030c9d323f326247f3122",
+                  userId: getUser('_id'),
                   surveyId
                 }
 

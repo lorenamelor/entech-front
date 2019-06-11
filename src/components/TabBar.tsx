@@ -4,12 +4,17 @@ import styled from 'styled-components';
 import { AppBar, Button, Toolbar } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import HomeIcon from '@material-ui/icons/Home';
+import { Redirect } from 'react-router-dom';
 
 import { Text, ModalCreateAdmUser } from '../components';
 import { Link } from 'react-router-dom';
 import theme from '../utils/theme';
+import { getUser, userSignout, selectLogout } from '../store/user';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { IRootState } from '../store';
 
-class ExampleComponent extends React.PureComponent {
+class ExampleComponent extends React.PureComponent<IMapStateToProps & IMapDispatchToProps> {
 
 	public state = { openModalSurvey: false };
 
@@ -19,6 +24,9 @@ class ExampleComponent extends React.PureComponent {
 
 	public render() {
 		const { openModalSurvey } = this.state;
+		const { signout } = this.props;
+
+		if (signout) { return <Redirect to="/" /> }
 		return (
 			<AppBar position="static">
 				<TabBar>
@@ -29,10 +37,14 @@ class ExampleComponent extends React.PureComponent {
 							<HomeIcon style={{color: theme.colors.gray60}} />
 						</Link>
 						<Separator />
-						<ButtomAction onClick={this.handleModalSurvey}>
-							<AddIcon fontSize='small' /> Adicionar Adm
-						</ButtomAction>
-						<Text>Sair</Text>
+						{ getUser('type') === 'adm' 
+						?
+							<ButtomAction onClick={this.handleModalSurvey}>
+								<AddIcon fontSize='small' /> Adicionar Adm
+							</ButtomAction>
+							: null
+						}
+							<ButtomLogout onClick={this.props.userSignOut}>Sair</ButtomLogout>
 					</Menu>
 				</TabBar>
 
@@ -85,4 +97,33 @@ const Separator = styled.hr`
   margin: 19px;
 `;
 
-export default ExampleComponent;
+const ButtomLogout = styled(Button)`
+&&{
+	background-color: transparent;
+	color: ${props => props.theme.colors.gray40};
+	text-transform: none;
+}
+` as typeof Button;
+
+// MAP TO PROPS
+
+
+interface IMapStateToProps {
+  signout: boolean;
+};
+
+// MAP TO PROPS
+
+const mapStateToProps = (state: IRootState): IMapStateToProps => ({
+  signout: selectLogout(state),
+});
+
+interface IMapDispatchToProps {
+  userSignOut: () => void;
+}
+
+const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
+  userSignOut: () => dispatch(userSignout.started({})),
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(ExampleComponent);

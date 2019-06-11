@@ -9,6 +9,7 @@ import appStateReducer, { epics as appStateEpics, init, IState as IAppStateState
 import userReducer, { epics as userEpics, IState as IUserState } from './user';
 import surveyReducer, { epics as surveyEpics, IState as ISurveyState } from './survey';
 import techshotReducer, { epics as techshotEpics, IState as ITechshotState } from './techShot';
+import eventReducer, { epics as eventEpics, IState as IEventState } from './event';
 
 
 // STORE INTERFACE
@@ -17,6 +18,7 @@ export interface IRootState {
 	surveyReducer: ISurveyState,
 	techshotReducer: ITechshotState,
 	userReducer: IUserState,
+	eventReducer: IEventState,
 }
 
 // COMBINED REDUCERS
@@ -25,6 +27,7 @@ const rootReducer = combineReducers<IRootState>({
 	userReducer,
 	surveyReducer,
 	techshotReducer,
+	eventReducer,
 });
 
 // COMBINED EPICS
@@ -34,6 +37,7 @@ const rootEpic = combineEpics(
 	notificationEpics,
 	surveyEpics,
 	techshotEpics,
+	eventEpics,
 );
 
 export type Epic = (action$: ActionsObservable<Action<any>>, state$: StateObservable<IRootState>) => Observable<Action<any>>;

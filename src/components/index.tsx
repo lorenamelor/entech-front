@@ -9,6 +9,9 @@ import ModalCreateAdmUser from './ModalCreateAdmUser';
 import CardTechShot from './CardTechShot';
 import FormSignUp from './FormSignUp';
 import FormLogin from './FormLogin';
+import Coments from './Coments';
+import CardComent from './CardComent';
+import AttendanceList from './AttendanceList';
 
 export {
 	TabBar,
@@ -22,4 +25,7 @@ export {
 	CardTechShot,
 	FormSignUp,
 	FormLogin,
+	Coments,
+	CardComent,
+	AttendanceList,
 };

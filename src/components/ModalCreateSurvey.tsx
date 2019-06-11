@@ -12,6 +12,7 @@ import { iSurvey } from '../utils/interfaces';
 import { surveyCreate, surveyEdit, selectSurvey, surveyRequestById } from '../store/survey';
 import { connect } from 'react-redux';
 import { IRootState } from '../store';
+import { getUser } from '../store/user';
 
 interface IProps {
   open: boolean;
@@ -75,7 +76,7 @@ class ModalCreateSurvey extends React.PureComponent<IProps & IMapDispatchToProps
 
                 const payload = {
                   ...values,
-                  userId: "5ce030c9d323f326247f3122"
+                  userId: getUser('_id')
                 }
 
                 surveyId 

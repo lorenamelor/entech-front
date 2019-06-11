@@ -2,7 +2,9 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { FormSignUp, FormLogin } from '../../components';
 import { Text } from '../../components';
-import {  Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router';
+
 
 // tslint:disable-next-line:no-var-requires
 const background = require('../../assets/imgs/background2.png');
@@ -25,6 +27,7 @@ class InitialScreen extends React.PureComponent<IProps> {
 	public render() {
 		const { isSignUp } = this.state;
 
+		if (sessionStorage.getItem('userData')) { return <Redirect to="/home" /> }
 		return (
 			<Wrapper>
 				<FormContainer>

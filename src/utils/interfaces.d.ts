@@ -33,3 +33,8 @@ export interface ITechShot {
   userId?: string,
   surveyId?: string,
 }
+
+export interface IPoll {
+  userId: string,
+  techshotId: string,
+}

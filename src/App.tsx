@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "react-alice-carousel/lib/alice-carousel.css";
 // Pages
-import { Home, Survey, InitialScreen } from './pages';
+import { Home, Survey, InitialScreen, Event, OAuth } from './pages';
 
 class App extends React.Component {
   public render() {
@@ -28,6 +28,9 @@ class App extends React.Component {
           <Route exact path='/cadastro' component={InitialScreen} />
           <Route exact path='/home' component={Home} />
           <Route exact path='/enquete/:surveyId' component={Survey} />
+          <Route exact path='/evento/:eventId' component={Event} />
+          <Route path='/oauth' component={OAuth} />
+          
         </div>
       </ThemeProvider>
     );

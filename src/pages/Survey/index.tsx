@@ -5,6 +5,7 @@ import { Dispatch } from 'redux';
 import { IRootState } from '../../store';
 import theme from '../../utils/theme';
 import map from 'lodash/map';
+import { Redirect } from 'react-router';
 
 import { iSurvey, ITechShot } from '../../utils/interfaces';
 import formatDate from '../../utils/formtData';
@@ -59,6 +60,8 @@ class Survey extends React.PureComponent<IMapDispatchToProps & IMapStateToProps 
 		const { openModalTechshot, expanded } = this.state;
 		const { match: { params: { surveyId } }, techshots, survey } = this.props;
 		const { title, startTime, endTime, date, surveyEndDate } = survey;
+
+		if (!sessionStorage.getItem('userData')) { return <Redirect to="/" /> }
 		return (
 			<>
 				<TabBar />

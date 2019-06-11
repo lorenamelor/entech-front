@@ -7,7 +7,13 @@ import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { TextField, Button, CircularProgress } from '@material-ui/core';
 import { IRootState } from '../store';
-import { userSignin, userActionDone, selectuserAction, selectIsCreateUser } from '../store/user';
+import { 
+  userSignin,
+  userActionDone,
+  selectSignIn,
+  selectIsCreateUser,
+  userSignoutClearState, 
+  selectLogout} from '../store/user';
 import theme from '../utils/theme';
 
 const validationForm = Yup.object().shape({
@@ -24,11 +30,22 @@ const initialValues = {
 }
 
 class FormLogin extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
+
+  public componentDidMount(){
+    if(this.props.signout){
+      this.props.userSignoutClearState();
+    }
+  }
+
+  public handleOAuth = () => {
+    return window.location.href = "https://secure.meetup.com/oauth2/authorize?client_id=20f5jmau76qqdo53cuo8tgohl3&response_type=code&redirect_uri=http://localhost:3000/oauth";
+  }
+
   public render() {
-    const { userAction, isCreateUser } = this.props;
+    const { signin, isCreateUser } = this.props;
     const { colors }  = theme;
 
-    if (userAction) { return <Redirect to="/home" /> }
+    if (signin) { return <Redirect to="/home" /> }
     return (
       <Wrapper>
           <Title>FAZER LOGIN</Title>
@@ -39,7 +56,6 @@ class FormLogin extends React.PureComponent<IMapDispatchToProps & IMapStateToPro
           validationSchema={validationForm}
           onSubmit={values => {
             this.props.userSignin(values);
-            this.props.userActionDone();
           }}
         >
           {({ errors, touched, values: {
@@ -80,7 +96,7 @@ class FormLogin extends React.PureComponent<IMapDispatchToProps & IMapStateToPro
                 <Btn type="submit" color={colors.primary}>
                   {isCreateUser ? <Spinner size={20} /> : 'Entrar'}
                 </Btn>
-                <Btn color={colors.pink}>
+                <Btn color={colors.pink} onClick={this.handleOAuth}>
                   Continuar com o <Image src={require("../assets/imgs/meetup-logo.png")} />
                 </Btn>
               </Form>
@@ -94,23 +110,28 @@ class FormLogin extends React.PureComponent<IMapDispatchToProps & IMapStateToPro
 
 // MAP TO PROPS
 interface IMapStateToProps {
-  userAction: boolean;
+  signin: boolean;
   isCreateUser: boolean;
+  signout: boolean;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({
-  userAction: selectuserAction(state),
+  signin: selectSignIn(state),
   isCreateUser: selectIsCreateUser(state),
+  signout: selectLogout(state),
+
 });
 
 interface IMapDispatchToProps {
   userSignin: (payload: {email: string, password: string}) => void;
   userActionDone: () => void;
+  userSignoutClearState: () => void;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
   userSignin: (payload: {email: string, password: string}) => dispatch(userSignin.started(payload)),
-  userActionDone: () => dispatch(userActionDone())
+  userActionDone: () => dispatch(userActionDone()),
+  userSignoutClearState: () => dispatch(userSignoutClearState())
 })
 
 

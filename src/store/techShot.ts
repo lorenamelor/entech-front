@@ -9,7 +9,8 @@ import {
   apiTechshotRequest,
   apiTechshotEdit,
   apiTechshotDelete,
-  apiTechshotRequestById,
+	apiTechshotRequestById,
+	apiTechshotPoll,
  } from '../services/api';
 
 import { ITechShot } from '../utils/interfaces';
@@ -28,7 +29,7 @@ export const techshotDelete = actionCreator.async<any, any, any>('DELETE');
 export const techshotRequest = actionCreator.async<any, any, any>('REQUEST');
 export const techshotRequestById = actionCreator.async<any, any, any>('REQUEST_BY_ID');
 export const techshotActionDone = actionCreator('TS_ACTION_DONE');
-
+export const techshotPoll = actionCreator.async<any, any, any>('POLL');
 
 // STATE
 export interface IState {
@@ -102,30 +103,6 @@ const techshotRequestEpic: Epic = (action$) => action$.pipe(
 	)),
 ));
 
-// const techshotRequest2Epic: Epic = (action$) => action$.pipe(
-// 	filter(techshotCreate.done.match),
-// 	mergeMap(() => from(apiTechshotRequest()).pipe(
-// 		map((techshots) => (techshotRequest.done({ result: techshots })),
-// 		catchError((error) => of(techshotRequest.failed({ error }))),
-// 	)),
-// ));
-
-// const techshotRequest3Epic: Epic = (action$) => action$.pipe(
-// 	filter(techshotEdit.done.match),
-// 	mergeMap(() => from(apiTechshotRequest()).pipe(
-// 		map((techshots) => (techshotRequest.done({ result: techshots })),
-// 		catchError((error) => of(techshotRequest.failed({ error }))),
-// 	)),
-// ));
-
-// const techshotRequest4Epic: Epic = (action$) => action$.pipe(
-// 	filter(techshotDelete.done.match),
-// 	mergeMap(() => from(apiTechshotRequest()).pipe(
-// 		map((techshots) => (techshotRequest.done({ result: techshots })),
-// 		catchError((error) => of(techshotRequest.failed({ error }))),
-// 	)),
-// ));
-
 const techshotRequestByIdEpic: Epic = (action$) => action$.pipe(
 	filter(techshotRequestById.started.match),
 	mergeMap(({payload: {techshotId}}) => from(apiTechshotRequestById(techshotId)).pipe(
@@ -134,13 +111,19 @@ const techshotRequestByIdEpic: Epic = (action$) => action$.pipe(
 	)),
 ));
 
+const techshotPollEpic: Epic = (action$) => action$.pipe(
+	filter((techshotPoll.started).match),
+	mergeMap(({payload}) => from(apiTechshotPoll(payload)).pipe(
+		map(({ data }) => techshotPoll.done({ params: { ...payload }, result: { data }})),
+		catchError((error) => of(techshotPoll.failed({ params: { ...payload }, error }))),
+  )),
+);
+
 export const epics = combineEpics(
   techshotCreateEpic,
   techshotRequestEpic,
-  // techshotRequest2Epic,
-  // techshotRequest3Epic,
-  // techshotRequest4Epic,
   techshotEditEpic,
   techshotDeleteEpic,
-  techshotRequestByIdEpic,
+	techshotRequestByIdEpic,
+	techshotPollEpic,
 );
