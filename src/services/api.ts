@@ -44,7 +44,6 @@ export async function apiSurveyCreate(payload: iSurvey): Promise<{ data: { msg: 
 }
 
 export async function apiSurveyRequest(): Promise<any>  {
-	console.log('getToken()', getToken())
 	const surveys: any = await axios.get(`https://tecweb-entech.azurewebsites.net/surveys`);
 	
 	return surveys.data;
@@ -107,7 +106,7 @@ export async function apiTechshotPoll(payload: ITechShot): Promise<{ data: { msg
 // EVENTS
 
 export async function apiEventRequest(): Promise<ITechShot>  {
-	const response = await axios.get(`https://tecweb-entech.azurewebsites.net/events`);
+	const response = await axios.get(`https://tecweb-entech.azurewebsites.net/events`, { headers: getToken() });
 	return response.data;
 }
 

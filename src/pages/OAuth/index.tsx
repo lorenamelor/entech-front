@@ -19,7 +19,6 @@ class OAuth extends React.PureComponent<IMapDispatchToProps & IMapStateToProps &
 		const { location: { search } } = this.props;
 		const { code } = queryString.parse(search);
 		this.props.userOAuth(code);
-		console.log('oauthToken', code);
 	}
 
 	public render() {

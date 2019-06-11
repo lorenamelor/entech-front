@@ -172,7 +172,7 @@ const userRequestEpic: Epic = (action$) => action$.pipe(
 	const userOAuthEpic: Epic = (action$) => action$.pipe(
 		filter(userOAuth.started.match),
 		mergeMap(({payload}) => from(apiUserOAuth(payload.code)).pipe(
-			map(({ data }) => {
+			map(( data ) => {
 				if(data){
 					sessionStorage.setItem('userData', JSON.stringify(data))
 				}
