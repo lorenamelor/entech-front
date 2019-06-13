@@ -15,7 +15,9 @@ npm start
 
 O aplicativo vai rodar na url: [localhost:3000](http://localhost:3000/).
 
+## Versão online
 
+https://entech-dti.azurewebsites.net/
 
 ## Documentação
 
