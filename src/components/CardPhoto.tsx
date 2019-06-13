@@ -22,7 +22,7 @@ function CardPhoto(props: IProps) {
       <CardActionArea>
         <CardMedia
           style={{ height: '140px' }}
-          image="https://www.beddingwarehouse.com.au/wp-content/uploads/2016/01/placeholder-featured-image.png"
+          image="https://picsum.photos/800/400?random=5"
           title="Evento"
         />
         <CardContent>

@@ -67,7 +67,7 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps & IProps> {
           id="panel1a-header"
         >
           <Summary>
-            <Photo alt="Remy Sharp" src="https://www.beddingwarehouse.com.au/wp-content/uploads/2016/01/placeholder-featured-image.png" />
+            <Photo alt="Remy Sharp" src="https://picsum.photos/800/400?random=1" />
             <SummaryInfo>
               <Header>
                 <Text bold size={15}> {title} </Text>

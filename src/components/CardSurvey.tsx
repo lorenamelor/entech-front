@@ -40,7 +40,7 @@ class CardSurvey extends React.PureComponent<IProps & IMapDispatchToProps> {
   }
 
   public render() {
-    const { _id, title, date, surveyEndDate } = this.props.survey;
+    const { _id, title, date, surveyEndDate, userId } = this.props.survey;
     const { openModalEdit, openModalDelete } = this.state;
 
     return (
@@ -49,7 +49,7 @@ class CardSurvey extends React.PureComponent<IProps & IMapDispatchToProps> {
             <Text bold wight size={15}>
               {title}
             </Text>
-            { getUser('_id')
+            { getUser('_id') === userId
               ?
               <ContainerBtn>
                 <LinkAction color={theme.colors.primary} to={`/enquete/${_id}`}>

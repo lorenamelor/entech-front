@@ -18,7 +18,7 @@ import {
 	selectIsRequestSurvey
 } from '../../store/survey';
 import { userActionDone, userSigninClearState, selectSignIn } from '../../store/user';
-import { eventRequest, selectEvents } from '../../store/event';
+import { eventRequest, selectEvents, selectIsRequestEvent } from '../../store/event';
 
 class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
 
@@ -47,7 +47,7 @@ class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
 	}
 
 	public render() {
-		const { surveys, isRequestSurvey, events } = this.props;
+		const { surveys, isRequestSurvey, events, isRequestEvent } = this.props;
 		const { openModalSurvey } = this.state;
 
 		const responsive = {
@@ -66,23 +66,27 @@ class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
 			<>
 				<TabBar />
 				<Wrapper>
-					
-					<Text bold size={24}>
-							Eventos
-					</Text>
+					{
+						!isRequestEvent && events.length > 0 &&
+						<>
+						<Text bold size={24}>
+								Eventos
+						</Text>
 
-					<AliceCarousel 
-						mouseDragEnabled 
-						responsive = {responsive}
-						stagePadding = {{
-							paddingLeft: 10,
-							paddingRight: 10,
-						}}
+						<AliceCarousel 
+							mouseDragEnabled 
+							responsive = {responsive}
+							stagePadding = {{
+								paddingLeft: 10,
+								paddingRight: 10,
+							}}
 
-						buttonsDisabled={true}
-					>
-					{map(events, (event: any) => <CardPhoto item={event} type='event' redirect={`/evento/${event._id}`}/> )}
-					</AliceCarousel>
+							buttonsDisabled={true}
+						>
+						{map(events, (event: any) => <CardPhoto item={event} type='event' redirect={`/evento/${event._id}`}/> )}
+						</AliceCarousel>
+					</>
+					}
 
 					<Header>
 						<Text bold size={24}>
@@ -113,12 +117,14 @@ interface IMapStateToProps {
 	isRequestSurvey: boolean;
 	signin: boolean;
 	events: [];
+	isRequestEvent: boolean;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({
 	surveys: selectSurveys(state),
 	surveyAction: selectSurveyAction(state),
 	isRequestSurvey: selectIsRequestSurvey(state),
+	isRequestEvent: selectIsRequestEvent(state),
 	signin: selectSignIn(state),
 	events: selectEvents(state)
 });

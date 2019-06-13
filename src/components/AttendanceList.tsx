@@ -34,21 +34,21 @@ class AttendaceList extends React.PureComponent<IMapDispatchToProps> {
 							</Text>
         <CardWrapper>
           <PersonConfirm>
-            <Photo alt="Remy Sharp" src="https://www.beddingwarehouse.com.au/wp-content/uploads/2016/01/placeholder-featured-image.png" />
+            <Photo alt="Remy Sharp" src="https://picsum.photos/800/400?random=1" />
             <Text bold wight size={15}>
               Lorena Carla
           </Text>
           </PersonConfirm>
 
           <PersonConfirm>
-            <Photo alt="Remy Sharp" src="https://www.beddingwarehouse.com.au/wp-content/uploads/2016/01/placeholder-featured-image.png" />
+            <Photo alt="Remy Sharp" src="https://picsum.photos/800/400?random=1" />
             <Text bold wight size={15}>
               Lorena Carla
           </Text>
           </PersonConfirm>
 
           <PersonConfirm>
-            <Photo alt="Remy Sharp" src="https://www.beddingwarehouse.com.au/wp-content/uploads/2016/01/placeholder-featured-image.png" />
+            <Photo alt="Remy Sharp" src="https://picsum.photos/800/400?random=1" />
             <Text bold wight size={15}>
               Lorena Carla
           </Text>

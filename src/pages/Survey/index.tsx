@@ -94,12 +94,19 @@ class Survey extends React.PureComponent<IMapDispatchToProps & IMapStateToProps 
 						</ButtomAction>
 					</ButtonCotainer>
 
-					{map(techshots, techshot => <CardTechShot 
-						expanded={expanded} 
-						key={techshot._id} 
-						techshot={techshot} 
-						handleChangePanel={this.handleChangePanel}
-					/>)}
+
+					{ techshots.length > 0 
+						?	map(techshots, techshot => <CardTechShot 
+							expanded={expanded} 
+							key={techshot._id} 
+							techshot={techshot} 
+							handleChangePanel={this.handleChangePanel}
+							/>)
+
+						: <Container>
+								<Text size={14}> Ainda não há techshots para esta enquete </Text>
+							</Container>
+					}
 
 					<ModalCreateTechShot 
 						open={openModalTechshot} 
@@ -156,6 +163,12 @@ const ButtonCotainer = styled.div`
 	display: flex;
 	width: 100%;
 	justify-content: flex-end;
+`;
+
+const Container = styled.div`
+  display: flex;
+	width: 100%;
+	justify-content: center;
 `;
 
 const ButtomAction = styled(Button)`
