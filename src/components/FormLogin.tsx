@@ -38,7 +38,7 @@ class FormLogin extends React.PureComponent<IMapDispatchToProps & IMapStateToPro
   }
 
   public handleOAuth = () => {
-    return window.location.href = "https://secure.meetup.com/oauth2/authorize?client_id=20f5jmau76qqdo53cuo8tgohl3&response_type=code&redirect_uri=http://localhost:3000/oauth";
+    return window.location.href = "https://secure.meetup.com/oauth2/authorize?client_id=20f5jmau76qqdo53cuo8tgohl3&response_type=code&redirect_uri=https://entech-dti.azurewebsites.net/oauth";
   }
 
   public render() {

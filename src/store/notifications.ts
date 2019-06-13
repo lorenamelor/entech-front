@@ -8,8 +8,8 @@ import actionCreatorFactory from 'typescript-fsa';
 import theme from '../utils/theme';
 
 import { surveyCreate, surveyEdit, surveyDelete } from './survey';
-import { techshotCreate, techshotEdit, techshotDelete } from './techShot';
-import { userCreate } from './user';
+import { techshotCreate, techshotEdit, techshotDelete, techshotPoll } from './techShot';
+import { userCreate, userSignin } from './user';
 
 const actionCreator = actionCreatorFactory('APP::NOTIFICATION');
 export const showToast = actionCreator('SHOW_TOAST');
@@ -30,6 +30,12 @@ const userCreateSuccessEpic: Epic = (action$: any) => action$.pipe(
 const userCreateErrorEpic: Epic = (action$: any) => action$.pipe(
   filter(userCreate.failed.match),
   tap(() => toast.error("Usuário já cadastrado")),
+  mapTo(showToast())
+)
+
+const userSigninErrorEpic: Epic = (action$: any) => action$.pipe(
+filter(userSignin.failed.match),
+  tap(() => toast.error("Dados de acesso inválidos")),
   mapTo(showToast())
 )
 
@@ -71,9 +77,18 @@ const techshotDeleteSuccessEpic: Epic = (action$: any) => action$.pipe(
   mapTo(showToast())
 )
 
+// POLL
+
+const techshotPollErrorEpic: Epic = (action$: any) => action$.pipe(
+  filter(techshotPoll.failed.match),
+  tap(() => toast.error("Você já atingiu o número máximo de votos para esta enquete")),
+  mapTo(showToast())
+)
+
 export const epics = combineEpics(
   userCreateSuccessEpic,
   userCreateErrorEpic,
+  userSigninErrorEpic,
 
   surveyCreateSuccessEpic,
   surveyEditSuccessEpic,
@@ -82,4 +97,6 @@ export const epics = combineEpics(
   techshotCreateSuccessEpic,
   techshotEditSuccessEpic,
   techshotDeleteSuccessEpic,
+
+  techshotPollErrorEpic,
 );

@@ -62,7 +62,14 @@ export default reducerWithInitialState(INITIAL_STATE)
 		...state,
 		techshot,
 	}))
-	.cases([techshotCreate.done, techshotEdit.done, techshotDelete.done, techshotActionDone], (state: IState) => ({
+	.case(techshotPoll.done, (state: IState, { result: techshot }) => ({
+		...state,
+		techshotAction: !state.techshotAction,
+	}))
+	.cases([techshotCreate.done,
+		 techshotEdit.done,
+		 techshotDelete.done, 
+		 techshotActionDone], (state: IState) => ({
 		...state,
 		techshotAction: !state.techshotAction,
 	}))
@@ -72,7 +79,7 @@ export default reducerWithInitialState(INITIAL_STATE)
 // EFFECTS
 
 const techshotCreateEpic: Epic = (action$) => action$.pipe(
-	filter((techshotCreate.started).match),
+	filter(techshotCreate.started.match),
 	mergeMap(({payload}) => from(apiTechshotCreate(payload)).pipe(
 		map(({ data }) => techshotCreate.done({ params: { ...payload }, result: { data }})),
 		catchError((error) => of(techshotCreate.failed({ params: { ...payload }, error }))),
@@ -112,9 +119,9 @@ const techshotRequestByIdEpic: Epic = (action$) => action$.pipe(
 ));
 
 const techshotPollEpic: Epic = (action$) => action$.pipe(
-	filter((techshotPoll.started).match),
+	filter(techshotPoll.started.match),
 	mergeMap(({payload}) => from(apiTechshotPoll(payload)).pipe(
-		map(({ data }) => techshotPoll.done({ params: { ...payload }, result: { data }})),
+		map(({ data }) => techshotPoll.done({ result: { data }})),
 		catchError((error) => of(techshotPoll.failed({ params: { ...payload }, error }))),
   )),
 );

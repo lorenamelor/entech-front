@@ -5,7 +5,8 @@ import { getUser } from '../store/user';
 // USER
 
 const getToken = () => ({
-	authorization: getUser('token')
+	authorization: getUser('token'),
+	'Content-Type': 'application/json'
 });
 
 
@@ -98,10 +99,9 @@ export async function apiTechshotRequestById(techshotId:string): Promise<ITechSh
 }
 
 // POLL
-export async function apiTechshotPoll(payload: ITechShot): Promise<{ data: { msg: any } }>  {
-	return axios.post(`https://tecweb-entech.azurewebsites.net/polls`, payload , { headers: getToken() });
+export async function apiTechshotPoll(payload: {userId: string, techShotId: string}): Promise<any>  {
+	return axios.post(`https://tecweb-entech.azurewebsites.net/techshots/polls`, payload , { headers: getToken() });
 }
-
 
 // EVENTS
 

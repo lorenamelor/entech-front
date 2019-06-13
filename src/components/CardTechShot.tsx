@@ -50,14 +50,14 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps & IProps> {
     this.handleModalDelete();
   }
 
-  public handleTechshotpoll = (techshotId: string, userId: string) => () => {
-    this.props.techshotPoll({techshotId, userId})
+  public handleTechshotpoll = (techShotId: string, userId: string) => () => {
+    this.props.techshotPoll({techShotId, userId})
   }
 
   public render() {
     const { openModalEdit, openModalDelete } = this.state;
     const { expanded, techshot, handleChangePanel } = this.props;
-    const { _id, title, duration, keywords, speaker, description, surveyId, userId } = techshot;
+    const { _id, title, duration, keywords, speaker, description, countPolls, surveyId, userId } = techshot;
 
     return (
       <CardWrapper onChange={handleChangePanel(_id!)} expanded={expanded === _id}>
@@ -101,7 +101,7 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps & IProps> {
 
           <Container>
             <Votes>
-              <Text bold size={22}> 32 </Text>
+              <Text bold size={22}> { countPolls } </Text>
               <Text>votos</Text>
             </Votes>
             <Separator />
@@ -151,7 +151,7 @@ interface IMapDispatchToProps {
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
   techshotDelete: (techshotId: string) => dispatch(techshotDelete.started({ techshotId })),
-  techshotPoll: (payload: IPoll) => dispatch(techshotPoll.started({ payload })),
+  techshotPoll: (payload: IPoll) => dispatch(techshotPoll.started(payload)),
 })
 
 

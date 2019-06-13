@@ -32,9 +32,10 @@ export interface ITechShot {
   description: string,
   userId?: string,
   surveyId?: string,
+  countPolls?: string | number,
 }
 
 export interface IPoll {
   userId: string,
-  techshotId: string,
+  techShotId: string,
 }
