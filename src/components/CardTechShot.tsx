@@ -106,7 +106,7 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps & IProps> {
             </Votes>
             <Separator />
             <BtnVote 
-              onClick={this.handleTechshotpoll(_id!,'5ce030c9d323f326247f3122')}>
+              onClick={this.handleTechshotpoll(_id!, getUser('_id'))}>
               Votar
             </BtnVote>
           </Container>
