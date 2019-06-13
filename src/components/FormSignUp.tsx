@@ -40,6 +40,11 @@ const initialValues = {
   confirmPassword: '',
 }
 class FormSignUp extends React.PureComponent<IProps & IMapDispatchToProps & IMapStateToProps> {
+
+  public handleOAuth = () => {
+    return window.location.href = "https://secure.meetup.com/oauth2/authorize?client_id=20f5jmau76qqdo53cuo8tgohl3&response_type=code&redirect_uri=https://entech-dti.azurewebsites.net/oauth";
+  }
+
   public render() {
 
     const { isCreateUser, signUpSuccess, isAdm, handleClose } = this.props;
@@ -133,7 +138,7 @@ class FormSignUp extends React.PureComponent<IProps & IMapDispatchToProps & IMap
                     <Btn type="submit" color={colors.primary}>
                       {isCreateUser ? <Spinner size={20} /> : 'Cadastrar'}
                     </Btn>
-                    <Btn color={colors.pink}>
+                    <Btn color={colors.pink} onClick={this.handleOAuth}>
                       Continuar com o <Image src={require("../assets/imgs/meetup-logo.png")} />
                     </Btn>
                   </>

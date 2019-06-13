@@ -49,21 +49,22 @@ class CardSurvey extends React.PureComponent<IProps & IMapDispatchToProps> {
             <Text bold wight size={15}>
               {title}
             </Text>
-            { getUser('_id') === userId
-              ?
               <ContainerBtn>
                 <LinkAction color={theme.colors.primary} to={`/enquete/${_id}`}>
                   <EyeIcon style={{ fontSize:'15px' }}/>
                 </LinkAction>
-                <BtnAction color={theme.colors.orange} onClick={this.handleModalEdit}>
-                  <EditIcon style={{ fontSize:'15px' }}/>
-                </BtnAction>
-                <BtnAction color={theme.colors.red} onClick={this.handleModalDelete}>
-                  <DeleteIcon style={{ fontSize:'15px' }}/>
-                </BtnAction>
+                { getUser('_id') === userId
+                  ? <>
+                      <BtnAction color={theme.colors.orange} onClick={this.handleModalEdit}>
+                        <EditIcon style={{ fontSize:'15px' }}/>
+                      </BtnAction>
+                      <BtnAction color={theme.colors.red} onClick={this.handleModalDelete}>
+                        <DeleteIcon style={{ fontSize:'15px' }}/>
+                      </BtnAction>
+                    </>
+                  : null
+                }
               </ContainerBtn>
-              : null
-            }
           </Header>
 
           <Info>
