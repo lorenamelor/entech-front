@@ -5,7 +5,7 @@ Front em reactjs e typeScript
 ## Leia antes de usar
 
 Apenas usuários administradores podem criar enquetes e outros administradores.
-Para testar novas funcionalidade entre com o usuário a seguir:
+Para testar todas funcionalidade entre com o usuário a seguir:
 
 login: admin@admin.com.br
 senha: admin123
