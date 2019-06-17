@@ -17,7 +17,7 @@ import {
 	surveyActionDone,
 	selectIsRequestSurvey
 } from '../../store/survey';
-import { userActionDone, userSigninClearState, selectSignIn } from '../../store/user';
+import { userActionDone, userSigninClearState, selectSignIn, getUser } from '../../store/user';
 import { eventRequest, selectEvents, selectIsRequestEvent } from '../../store/event';
 
 class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
@@ -83,7 +83,7 @@ class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
 
 							buttonsDisabled={true}
 						>
-						{map(events, (event: any) => <CardPhoto item={event} type='event' redirect={`/evento/${event._id}`}/> )}
+						{map(events, (event: any) => <CardPhoto countItem={events.length} item={event} type='event' redirect={`/evento/${event._id}`}/> )}
 						</AliceCarousel>
 					</>
 					}
@@ -92,9 +92,13 @@ class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
 						<Text bold size={24}>
 							Enquetes
 						</Text>
-						<ButtomAction onClick={this.handleModalSurvey}>
-							<AddIcon fontSize='small' /> Adicionar Enquete
-						</ButtomAction>
+						{ getUser('type') === 'adm' 
+							?
+							<ButtomAction onClick={this.handleModalSurvey}>
+								<AddIcon fontSize='small' /> Adicionar Enquete
+							</ButtomAction>
+							: null
+						}
 					</Header>
 					<GroupSurvey>
 						{isRequestSurvey

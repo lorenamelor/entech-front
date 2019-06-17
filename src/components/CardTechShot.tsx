@@ -67,7 +67,7 @@ class CardTechShot extends React.PureComponent<IMapDispatchToProps & IProps> {
           id="panel1a-header"
         >
           <Summary>
-            <Photo alt="Remy Sharp" src="https://picsum.photos/800/400?random=1" />
+            <Photo alt="Remy Sharp" src={`https://picsum.photos/600/400?random=${Math.random()}`} />
             <SummaryInfo>
               <Header>
                 <Text bold size={15}> {title} </Text>

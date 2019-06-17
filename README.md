@@ -2,6 +2,18 @@
 
 Front em reactjs e typeScript
 
+## Leia antes de usar
+
+Apenas usuários administradores podem criar enquetes e outros administradores.
+Para testar novas funcionalidade entre com o usuário a seguir:
+
+login: admin@admin.com.br
+senha: admin123
+
+## Versão online
+
+https://entech-dti.azurewebsites.net/
+
 ## Rodar local 
 
 Você vai precisar de [Node.js](http://nodejs.org/).
@@ -15,10 +27,3 @@ npm start
 
 O aplicativo vai rodar na url: [localhost:3000](http://localhost:3000/).
 
-## Versão online
-
-https://entech-dti.azurewebsites.net/
-
-## Documentação
-
-[Swagger EnTech](https://app.swaggerhub.com/apis-docs/LucasASantos/EnTech/1.0.0)

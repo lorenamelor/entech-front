@@ -45,7 +45,7 @@ class Event extends React.PureComponent<IMapDispatchToProps & IMapStateToProps &
 				<TabBar />
 				<Wrapper>
 					<Top>
-						<Image src="https://picsum.photos/800/400?random=2" />
+						<Image src={`https://picsum.photos/600/400?random=${Math.random()}`} />
 						<InfoContainer>
 							<Text bold size={24}>
 								{title}

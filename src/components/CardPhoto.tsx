@@ -12,17 +12,18 @@ interface IProps {
   item: any,
   type: string,
   redirect?: string,
+  countItem?: number;
 }
 
 function CardPhoto(props: IProps) {
-  const { item, type, redirect } = props;
+  const { item, type, redirect, countItem } = props;
   return (
     <LinkTo to={type==='event'? redirect! : ''}>
-    <CardWrapper>
+    <CardWrapper countItem={countItem}>
       <CardActionArea>
         <CardMedia
-          style={{ height: '140px' }}
-          image="https://picsum.photos/800/400?random=5"
+          style={countItem && countItem <= 3 ? { height: '240px' } : { height: '140px'} }
+          image={`https://picsum.photos/600/400?random=${Math.random()}`}
           title="Evento"
         />
         <CardContent>
@@ -58,13 +59,13 @@ function CardPhoto(props: IProps) {
   );
 }
 
-const CardWrapper = styled(Card)`
+const CardWrapper: any = styled(Card)<{countItem?: number}>`
 &&{
   margin: 10px;
-  height: 240px;
+height: ${({countItem}) => countItem && countItem <= 3 ? '340px' : '240px'};
 }
 
-` as typeof Card;
+`;
 
 const Container = styled.div`
   display: flex;
