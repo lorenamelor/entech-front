@@ -9,6 +9,7 @@ import { Button, Welcome } from '@storybook/react/demo';
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 
 storiesOf('Button', module)
+.addDecorator(storyFn => <div style={{ textAlign: 'center' }}>{storyFn()}</div>)
   .add('with text', () => <Button onClick={action('clicked')}>Hello Button</Button>)
   .add('with some emoji', () => (
     <Button onClick={action('clicked')}>
@@ -16,4 +17,6 @@ storiesOf('Button', module)
         😀 😎 👍 💯
       </span>
     </Button>
-  ));
+  ), {
+    notes: "joao"
+  });
