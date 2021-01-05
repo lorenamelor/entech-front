@@ -18,7 +18,7 @@
     "@types/styled-components": "4.1.8",
     "@types/xdate": "^0.8.29",
     "@types/yup": "^0.26.12",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "formik": "^1.5.1",
     "glamor": "^2.20.40",
     "lodash": "^4.17.11",
