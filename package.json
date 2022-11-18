@@ -31,7 +31,7 @@
     "react-image-compressor": "^1.0.1",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
-    "react-scripts-ts": "2.17.0",
+    "react-scripts-ts": "4.0.8",
     "react-toastify": "^5.0.0-rc.5",
     "redux": "^4.0.0",
     "redux-devtools": "^3.4.1",
@@ -59,7 +59,7 @@
     "@storybook/addon-actions": "^5.1.9",
     "@storybook/addon-links": "^5.1.9",
     "@storybook/addons": "^5.1.9",
-    "@storybook/react": "^5.1.9",
+    "@storybook/react": "^6.5.13",
     "babel-loader": "^8.0.6"
   }
 }
